@@ -1,0 +1,72 @@
+local ADDON_NAME, ns = ...
+
+-- ==========================================
+-- IDIOMA POR DEFECTO (enUS / enGB)
+-- ==========================================
+-- Este fichero define TODAS las claves. Los demas Locales/<idioma>.lua se
+-- cargan despues y sobrescriben las suyas; lo que falte se queda en ingles.
+
+local L = ns.L or {}
+ns.L = L
+
+L["OPTIONS_TITLE"] = "Emoji & React Options"
+L["GENERAL"] = "General"
+L["DEFAULTS"] = "Reset to defaults"
+L["VERSION"] = "Version:"
+L["AUTHOR"] = "Author:"
+L["LINKS"] = "Links"
+L["COMMANDS"] = "Commands"
+L["SELECT"] = "Select"
+L["SELECT_TOOLTIP"] = "Selects the whole link so you can copy it with Ctrl+C. WoW does not let addons write to the clipboard, so the last step is yours."
+L["ABOUT_DESC"] = "Emojis in chat and speech bubbles, plus a reaction wheel like the game's Ping Wheel: hold a key, pick a reaction and it pops up above your character for nearby players who also have the addon."
+L["CMD_OPEN"] = "Opens the options panel."
+L["CMD_KEY"] = "Choose the key that opens the reaction wheel."
+L["CMD_TEST"] = "Shows a reaction above your character (only you see it)."
+L["CHAT_PREFIX"] = "|cffd597ffEmoji & React:|r "
+
+L["CHAT_HEADER"] = "Chat"
+L["CHAT_EMOJIS"] = "Emojis in chat"
+L["CHAT_EMOJIS_TOOLTIP"] = "Turns :joy: codes and pasted emojis into images in the chat window. Players without the addon see the text."
+L["BUBBLE_EMOJIS"] = "Emojis in speech bubbles"
+L["BUBBLE_EMOJIS_TOOLTIP"] = "Also shows them in /say, /yell and party bubbles. Blizzard does not let addons change bubbles inside dungeons and raids."
+L["EMOTICONS"] = "Convert :) :D <3"
+L["EMOTICONS_TOOLTIP"] = "Classic emoticons become emojis too. Only when they are surrounded by spaces, so links and URLs are left alone."
+L["PICKER_BUTTON"] = "Emoji button in the chat box"
+L["PICKER_BUTTON_TOOLTIP"] = "A small button inside the chat input box that opens a grid with every emoji."
+L["CHAT_SIZE"] = "Size in chat"
+L["CHAT_SIZE_TOOLTIP"] = "Emoji size in the chat window, in pixels."
+L["BUBBLE_SIZE"] = "Size in bubbles"
+L["BUBBLE_SIZE_TOOLTIP"] = "Emoji size in speech bubbles, in pixels."
+
+L["REACTIONS_HEADER"] = "Reactions"
+L["REACTIONS"] = "Enable reactions"
+L["REACTIONS_TOOLTIP"] = "Send and see reactions. When off, the wheel does not open and others' reactions are not shown."
+L["KEY"] = "Wheel key:"
+L["KEY_TOOLTIP"] = "Click and press the key (or combination) that opens the wheel. Hold it, point the mouse towards a reaction and release. Scroll to change page."
+L["KEY_WAITING"] = "Press a key..."
+L["KEY_CLEAR"] = "Clear"
+L["KEY_NONE"] = "Not set"
+L["KEY_CAPTURE"] = "Press the key (or combination) that opens the wheel\nMiddle/side mouse button: click here\n|cff999999Esc to cancel|r"
+L["KEY_COMBAT"] = "Key bindings and nameplate options cannot change in combat."
+L["KEY_SET"] = "reaction wheel on %s"
+L["KEY_REPLACED"] = "(replaces: %s)"
+L["KEY_HINT"] = "choose your reaction wheel key with |cff00ff00/emoji key|r"
+L["FRIENDLY_PLATES"] = "Show friendly player names"
+L["FRIENDLY_PLATES_TOOLTIP"] = "Game option needed to see other players' reactions: they appear above their nameplate. Turning it on also sets names only, without health bar."
+L["REACTION_SIZE"] = "Reaction size"
+L["REACTION_SIZE_TOOLTIP"] = "Size of the reaction above characters, in pixels."
+L["SELF_HEIGHT"] = "Height above you"
+L["SELF_HEIGHT_TOOLTIP"] = "Your character has no nameplate, so your reaction is placed above the screen center. Adjust it to your camera zoom."
+L["TEST"] = "Test"
+L["TEST_TOOLTIP"] = "Shows your first reaction above your character. Only you see it."
+L["SLOTS"] = "Wheel page:"
+L["SLOT_TOOLTIP"] = "Click to choose the emoji for this slot. On the wheel: 1 top, 2 left, 3 bottom, 4 right."
+L["BINDING_WHEEL"] = "Reaction wheel (hold)"
+L["WHEEL_SCALE"] = "Wheel size"
+L["PAGE_FMT"] = "Page %d/%d · scroll to switch"
+L["WHEEL_SCALE_TOOLTIP"] = "Size of the reaction wheel on screen."
+L["PAGE_TOOLTIP"] = "The wheel has 6 pages of 4 reactions. While it is open, scroll the mouse wheel to switch pages."
+L["CMD_STATUS"] = "Shows how reactions are sent, the wheel key and whether friendly names are on."
+L["STATUS"] = "sending by %s · wheel key: %s · friendly names: %s"
+L["STATUS_SAY"] = "SAY (nearby players)"
+L["STATUS_CHANNEL"] = "hidden channel %s (#%d)"

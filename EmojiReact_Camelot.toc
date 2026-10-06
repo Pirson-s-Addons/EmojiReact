@@ -1,0 +1,45 @@
+## Interface: 16001
+## Version: 1.00
+## Author: Pirson
+## IconTexture: Interface\AddOns\EmojiReact\img\logo_er
+## Title: |cffd597ffEmoji & React|r
+
+# https://warcraft.wiki.gg/wiki/Addon_Categories
+## Category: Chat
+## Category-deDE: Chat
+## Category-esES: Chat
+## Category-esMX: Chat
+## Category-frFR: Discussion
+## Category-itIT: Chat
+## Category-koKR: 대화
+## Category-ptBR: Bate-papo
+## Category-ruRU: Чат
+## Category-zhCN: 聊天
+## Category-zhTW: 對話
+
+## Notes: |cFF33CCFFEmojis in chat and speech bubbles, plus a reaction wheel like the game's Ping Wheel that shows reactions above your character.|r
+## Notes-deDE: |cFF33CCFFEmojis im Chat und in Sprechblasen, dazu ein Reaktionsrad wie das Ping-Rad des Spiels, das Reaktionen über deinem Charakter zeigt.|r
+## Notes-esES: |cFF33CCFFEmojis en el chat y en los bocadillos, y una rueda de reacciones como la de avisos del juego que las muestra encima de tu personaje.|r
+## Notes-esMX: |cFF33CCFFEmojis en el chat y en los bocadillos, y una rueda de reacciones como la de avisos del juego que las muestra encima de tu personaje.|r
+## Notes-frFR: |cFF33CCFFDes emojis dans le chat et les bulles, plus une roue de réactions comme la roue de signalement du jeu qui les affiche au-dessus de votre personnage.|r
+## Notes-itIT: |cFF33CCFFEmoji nella chat e nei fumetti, più una ruota di reazioni come quella delle segnalazioni del gioco che le mostra sopra il tuo personaggio.|r
+## Notes-koKR: |cFF33CCFF채팅과 말풍선에 이모지를 표시하고, 게임의 핑 휠 같은 반응 휠로 캐릭터 위에 반응을 띄웁니다.|r
+## Notes-ptBR: |cFF33CCFFEmojis no bate-papo e nos balões de fala, mais uma roda de reações como a de sinalização do jogo que as mostra sobre seu personagem.|r
+## Notes-ruRU: |cFF33CCFFЭмодзи в чате и в облачках речи, а также колесо реакций как колесо меток в игре, показывающее реакции над вашим персонажем.|r
+## Notes-zhCN: |cFF33CCFF在聊天和对话气泡中显示表情符号，并提供类似游戏标记轮盘的反应轮盘，在角色头顶显示反应。|r
+## Notes-zhTW: |cFF33CCFF在聊天和對話泡泡中顯示表情符號，並提供類似遊戲標記輪盤的反應輪盤，在角色頭頂顯示反應。|r
+
+## SavedVariables: EmojiReactDB
+
+# Solo WoW Forever: el sufijo _Camelot es el game type que busca ese cliente, y
+# sin un .toc generico ningun otro cliente lista el addon.
+
+Locales/enUS.lua
+Locales/esES.lua
+Core/Emojis.lua
+Core/Chat.lua
+Core/Reactions.lua
+UI/About.lua
+UI/Wheel.lua
+UI/Options.lua
+Core/EmojiReact.lua
