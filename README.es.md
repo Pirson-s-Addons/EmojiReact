@@ -32,8 +32,9 @@
 
 ## Funciones
 
-- 39 emojis en el chat y en los bocadillos de /decir, /gritar y grupo.
-- Botón de emojis dentro de la caja de chat: una cuadrícula con todos, clic para insertarlo.
+- **Todos los emojis** (1.900 más sus tonos de piel) en el chat y en los bocadillos de /decir, /gritar y grupo, escritos como `:joy:` (códigos de Discord/Slack) o pegados.
+- **Panel de emojis como el de WhatsApp** desde un botón en la caja de chat: buscador en tu idioma, categorías, recientes y tonos de piel (clic derecho en un emoji).
+- **Reacciones con imágenes propias**, distintas de los emojis del chat.
 - También convierte los emoticonos clásicos (`:)`, `:D`, `<3`...) sin tocar enlaces ni URLs.
 - Rueda de reacciones igual que la **Ping Wheel** del propio juego: mantén **la tecla que tú elijas** (tecla, combinación o botón del ratón), apunta con el ratón hacia una reacción y suelta; soltando en la X del centro se cancela. 6 páginas de 4 reacciones que cambias con la rueda del ratón, todas elegidas por ti.
 - Los ajustes están en el panel del propio juego, **Opciones → AddOns**: tamaños, qué convertir, la tecla de la rueda, sus reacciones y la altura de tu propia reacción.
@@ -59,4 +60,4 @@
 
 ---
 
-**Autor**: Pirson · [GitHub](https://github.com/Pirson-s-Addons) · [CurseForge](https://www.curseforge.com/members/pirson/projects) · Licencia MIT · Gráficos de los emojis: [Twemoji](https://github.com/jdecked/twemoji) (CC-BY 4.0)
+**Autor**: Pirson · [GitHub](https://github.com/Pirson-s-Addons) · [CurseForge](https://www.curseforge.com/members/pirson/projects) · Licencia MIT · Gráficos de los emojis: [Twemoji](https://github.com/jdecked/twemoji) (CC-BY 4.0) · Datos de los emojis: [emojibase](https://emojibase.dev) (MIT)

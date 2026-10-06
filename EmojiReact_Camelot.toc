@@ -1,5 +1,5 @@
 ## Interface: 16001
-## Version: 1.01
+## Version: 1.10
 ## Author: Pirson
 ## IconTexture: Interface\AddOns\EmojiReact\img\logo_er
 ## Title: |cffd597ffEmoji & React|r
@@ -36,10 +36,23 @@
 
 Locales/enUS.lua
 Locales/esES.lua
+Data/EmojiData.lua
+Data/Search_en.lua
+Data/Search_deDE.lua
+Data/Search_esES.lua
+Data/Search_esMX.lua
+Data/Search_frFR.lua
+Data/Search_itIT.lua
+Data/Search_koKR.lua
+Data/Search_ptBR.lua
+Data/Search_ruRU.lua
+Data/Search_zhCN.lua
+Data/Search_zhTW.lua
 Core/Emojis.lua
 Core/Chat.lua
 Core/Reactions.lua
 UI/About.lua
 UI/Wheel.lua
+UI/EmojiPicker.lua
 UI/Options.lua
 Core/EmojiReact.lua

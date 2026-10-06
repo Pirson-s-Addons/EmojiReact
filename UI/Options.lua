@@ -192,10 +192,10 @@ local function CreateGeneral()
         number:SetText(i)
         local function Index() return (page - 1) * ns.SLOTS + i end
         slot:SetScript("OnClick", function(self)
-            ns.ToggleEmojiGrid(self, function(code)
+            ns.ToggleReactionGrid(self, function(code)
                 db.slots[Index()] = code
                 self:SetNormalTexture(ns.REACTION .. code)
-            end, ns.REACTION)
+            end)
         end)
         AddTooltip(slot, L.SLOT_TOOLTIP)
         slot.Refresh = function(self) self:SetNormalTexture(ns.REACTION .. db.slots[Index()]) end

@@ -46,27 +46,23 @@ local function UpdateBubbles()
 end
 
 -- ==========================================
--- CUADRICULA DE EMOJIS
+-- CUADRICULA DE REACCIONES
 -- ==========================================
--- Una sola ventana para todo: el boton de la caja de chat la usa para escribir
--- el emoji y las opciones para elegir el de cada hueco de la rueda. Cada uno
--- la abre con sus imagenes: emojis del chat o pegatinas de reaccion.
+-- Las opciones la abren para elegir la pegatina de cada hueco de la rueda.
+-- (El panel de emojis del chat, estilo WhatsApp, esta en UI/EmojiPicker.lua.)
 
-local COLS, CELL = 8, 28
-local grid = CreateFrame("Frame", "EmojiReactGrid", UIParent, "TooltipBackdropTemplate")
-grid:SetSize(COLS * CELL + 12, math.ceil(#ns.EMOJIS / COLS) * CELL + 12)
+local COLS, CELL = 8, 34
+local grid = CreateFrame("Frame", "EmojiReactReactionGrid", UIParent, "TooltipBackdropTemplate")
+grid:SetSize(COLS * CELL + 12, math.ceil(#ns.REACTIONS / COLS) * CELL + 12)
 grid:SetFrameStrata("FULLSCREEN_DIALOG")
 grid:Hide()
-tinsert(UISpecialFrames, "EmojiReactGrid") -- Esc la cierra
+tinsert(UISpecialFrames, "EmojiReactReactionGrid") -- Esc la cierra
 
-local cells = {}
-for i, e in ipairs(ns.EMOJIS) do
-    local code = e[1]
+for i, code in ipairs(ns.REACTIONS) do
     local b = CreateFrame("Button", nil, grid)
-    b.code = code
-    cells[i] = b
     b:SetSize(CELL - 2, CELL - 2)
     b:SetPoint("TOPLEFT", 6 + (i - 1) % COLS * CELL, -6 - math.floor((i - 1) / COLS) * CELL)
+    b:SetNormalTexture(ns.REACTION .. code)
     b:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
     b:SetScript("OnClick", function()
         grid:Hide()
@@ -74,30 +70,22 @@ for i, e in ipairs(ns.EMOJIS) do
     end)
     b:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_TOP")
-        GameTooltip:SetText(":" .. code .. ":")
+        GameTooltip:SetText((code:gsub("_", " ")))
         GameTooltip:Show()
     end)
     b:SetScript("OnLeave", function() GameTooltip:Hide() end)
 end
 
--- Abre la cuadricula pegada a anchor con las imagenes de folder (ns.EMOJI o
--- ns.REACTION); onPick(codigo) al elegir. Otro clic la cierra.
-function ns.ToggleEmojiGrid(anchor, onPick, folder)
+-- Abre la cuadricula pegada a anchor; onPick(nombre) al elegir. Otro clic la cierra.
+function ns.ToggleReactionGrid(anchor, onPick)
     if grid:IsShown() and grid.anchor == anchor then
         grid:Hide()
         return
     end
-    for _, b in ipairs(cells) do b:SetNormalTexture(folder .. b.code) end
     grid.anchor, grid.onPick = anchor, onPick
     grid:ClearAllPoints()
     grid:SetPoint("BOTTOMRIGHT", anchor, "TOPRIGHT", 0, 4)
     grid:Show()
-end
-
-local function InsertInChat(code)
-    local text = ":" .. code .. ": "
-    local editBox = ChatFrameUtil.GetActiveWindow()
-    if editBox then editBox:Insert(text) else ChatFrameUtil.OpenChat(text) end
 end
 
 local pickerButton
@@ -122,8 +110,8 @@ function ns.InitChat()
     pickerButton = CreateFrame("Button", nil, editBox)
     pickerButton:SetSize(18, 18)
     pickerButton:SetPoint("RIGHT", -6, 0)
-    pickerButton:SetNormalTexture(ns.EMOJI .. "smile")
+    pickerButton:SetNormalTexture(ns.EMOJI .. "1f604")
     pickerButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
-    pickerButton:SetScript("OnClick", function(self) ns.ToggleEmojiGrid(self, InsertInChat, ns.EMOJI) end)
+    pickerButton:SetScript("OnClick", function() ns.TogglePicker() end)
     ns.ApplyPickerButton()
 end

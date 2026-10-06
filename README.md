@@ -32,8 +32,9 @@
 
 ## Features
 
-- 39 emojis in chat and in /say, /yell and party speech bubbles.
-- Emoji button inside the chat box: a grid with every emoji, click to insert it.
+- **Every emoji** (1,900 plus skin tones) in chat and in /say, /yell and party speech bubbles, written as `:joy:` (Discord/Slack codes) or pasted.
+- **WhatsApp-style emoji panel** from a button inside the chat box: search in your language, categories, recently used and skin tones (right-click an emoji).
+- **Reactions with their own images**, separate from the chat emojis.
 - Classic emoticons (`:)`, `:D`, `<3`...) converted too, without touching links or URLs.
 - Reaction wheel that looks and works like the game's own **Ping Wheel**: hold **the key you choose** (keyboard, combination or mouse button), point the mouse towards a reaction and release; release on the center X to cancel. 6 pages of 4 reactions, switched with the mouse wheel, all of them chosen by you.
 - Settings live in the game's own **Options → AddOns** panel: sizes, what to convert, the wheel key, the wheel reactions and the height of your own reaction.
@@ -59,4 +60,4 @@
 
 ---
 
-**Author**: Pirson · [GitHub](https://github.com/Pirson-s-Addons) · [CurseForge](https://www.curseforge.com/members/pirson/projects) · MIT License · Emoji graphics: [Twemoji](https://github.com/jdecked/twemoji) (CC-BY 4.0)
+**Author**: Pirson · [GitHub](https://github.com/Pirson-s-Addons) · [CurseForge](https://www.curseforge.com/members/pirson/projects) · MIT License · Emoji graphics: [Twemoji](https://github.com/jdecked/twemoji) (CC-BY 4.0) · Emoji data: [emojibase](https://emojibase.dev) (MIT)

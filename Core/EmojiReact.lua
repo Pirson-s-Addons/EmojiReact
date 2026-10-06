@@ -21,17 +21,17 @@ ns.DEFAULTS = {
     reactionSize = 56,
     selfHeight = 170,
     wheelScale = 1,
+    recent = {}, -- ultimos emojis escritos desde el panel (ficheros)
+    tones = {},  -- tono de piel elegido para cada emoji base (1..5)
     page = 1,
-    -- 6 paginas de 4 (ns.PAGES x ns.SLOTS): arriba, izquierda, abajo, derecha
-    slots = {
-        "joy", "heart_eyes", "thumbsup", "heart",
-        "clap", "cry", "angry", "fire",
-        "rofl", "wink", "sunglasses", "thinking",
-        "partying", "scream", "facepalm", "wave",
-        "kiss", "sob", "rage", "skull",
-        "muscle", "pray", "100", "tada",
-    },
 }
+
+-- Huecos de la rueda (ns.PAGES x ns.SLOTS; en cada pagina: arriba, izquierda,
+-- abajo, derecha): las reacciones en orden, repitiendo si faltan
+ns.DEFAULTS.slots = {}
+for i = 1, ns.PAGES * ns.SLOTS do
+    ns.DEFAULTS.slots[i] = ns.REACTIONS[(i - 1) % #ns.REACTIONS + 1]
+end
 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
@@ -44,7 +44,7 @@ frame:SetScript("OnEvent", function(self, _, name)
     end
     -- Huecos nuevos (la rueda empezo con 8) o con un emoji quitado de la lista
     for i, code in ipairs(ns.DEFAULTS.slots) do
-        if not ns.VALID[db.slots[i] or ""] then db.slots[i] = code end
+        if not ns.REACTION_VALID[db.slots[i] or ""] then db.slots[i] = code end
     end
     if db.page > ns.PAGES then db.page = 1 end
     ns.db = db

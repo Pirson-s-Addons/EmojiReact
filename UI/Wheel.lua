@@ -11,10 +11,13 @@ local L = ns.L
 --
 -- El juego solo trae el marco para 4 porciones (Radial_Wheel_Frame_Count_4),
 -- asi que son 4 reacciones por pagina y la rueda del raton pasa de pagina.
+-- Las paginas salen del numero de reacciones de ns.REACTIONS.
 -- Orden de la plantilla: 1 arriba, 2 izquierda, 3 abajo, 4 derecha.
 -- Contrastado con Gethe/wow-ui-source, rama "forever".
 
-ns.SLOTS, ns.PAGES = 4, 6
+ns.SLOTS = 4
+-- Paginas justas para todas las reacciones, de 1 a 6
+ns.PAGES = math.max(1, math.min(6, math.ceil(#ns.REACTIONS / ns.SLOTS)))
 
 local ICON = 48
 

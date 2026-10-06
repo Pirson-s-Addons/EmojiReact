@@ -98,7 +98,7 @@ end
 local function IsSuccess(result) return result == true or result == 0 end
 
 function ns.React(code)
-    if not ns.db.reactions or not ns.VALID[code] or GetTime() - lastSent < 1.5 then return end
+    if not ns.db.reactions or not ns.REACTION_VALID[code] or GetTime() - lastSent < 1.5 then return end
     lastSent = GetTime()
     ns.ShowOnSelf(code)
     local msg = "R:" .. code
@@ -122,7 +122,7 @@ local function Receive(text, sender)
     local name = Ambiguate(sender, "none")
     if name == UnitName("player") then return end
     local code = text:match("^R:([%w_]+)$")
-    if code and ns.VALID[code] then ShowOnPlayer(name, code) end
+    if code and ns.REACTION_VALID[code] then ShowOnPlayer(name, code) end
 end
 
 -- El canal oculto no sale en ninguna ventana de chat, ni sus avisos de entrada
