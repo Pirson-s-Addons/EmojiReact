@@ -36,7 +36,7 @@
 - **WhatsApp-style emoji panel** from a button inside the chat box: search in your language, categories, recently used and skin tones (right-click an emoji).
 - **Reactions with their own images**, separate from the chat emojis.
 - Classic emoticons (`:)`, `:D`, `<3`...) converted too, without touching links or URLs.
-- Reaction wheel that looks and works like the game's own **Ping Wheel**: hold **the key you choose** (keyboard, combination or mouse button), point the mouse towards a reaction and release; release on the center X to cancel. 6 pages of 4 reactions, switched with the mouse wheel, all of them chosen by you.
+- Reaction wheel that looks and works like the game's own **Ping Wheel**: hold **the key you choose** (keyboard, combination or mouse button), point the mouse towards a reaction and release; release on the center X to cancel. Pages of 4 reactions (one per 4 reaction images), switched with the mouse wheel, all of them chosen by you.
 - Settings live in the game's own **Options → AddOns** panel: sizes, what to convert, the wheel key, the wheel reactions and the height of your own reaction.
 - Lightweight, no libraries.
 
@@ -48,8 +48,9 @@
 
 ## Usage
 
-- `/emoji` opens the settings. `/emoji key` chooses the wheel key. `/emoji test` shows a reaction above you.
-- **Options → AddOns → Emoji & React → General**: chat, bubbles, sizes, wheel key and wheel reactions.
+- `/emoji` opens the settings. `/emoji wheel` opens the reactions panel. `/emoji panel` opens the emoji panel (also from the button in the chat box or its key binding). `/emoji key` chooses the wheel key. `/emoji test` shows a reaction above you.
+- **Options → AddOns → Emoji & React → General**: chat and bubbles.
+- **Options → AddOns → Emoji & React → Reactions**: the wheel as it looks in game. Click a slot and pick its reaction, add or remove pages, and set the key, sizes and height.
 - To see **other players'** reactions, turn on *Show friendly player names* in the same panel: reactions appear above their nameplate.
 
 ## Notes

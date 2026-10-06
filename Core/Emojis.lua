@@ -89,6 +89,23 @@ function ns.BaseOf(file)
     return BASE_OF[file] or file
 end
 
+-- Nombre del emoji en el idioma del cliente (o en ingles), de Data/Search_*.lua
+function ns.NameOf(file)
+    local base = ns.BaseOf(file)
+    local t = (ns.EMOJI_TEXT_LOCAL or {})[base] or (ns.EMOJI_TEXT_EN or {})[base]
+    return t and t[1] or ns.CodeOf(file)
+end
+
+-- Nombre de una reaccion: su etiqueta corta (L["REACTION_<codigo>"], "Risa",
+-- "Me encanta"...) o, si no tiene, el nombre de su emoji (las reacciones se
+-- llaman como su :codigo:). Los de emoji son largos para la rueda.
+function ns.ReactionName(code)
+    local label = ns.L["REACTION_" .. code]
+    if label then return label end
+    local file = BY_CODE[code]
+    return file and ns.NameOf(file) or code
+end
+
 local emoticonPatterns = {}
 for text, file in pairs(EMOTICONS) do
     emoticonPatterns["(%s)" .. text:gsub("%p", "%%%0") .. "%f[%s]"] = file

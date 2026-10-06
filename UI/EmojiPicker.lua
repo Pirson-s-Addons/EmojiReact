@@ -79,14 +79,9 @@ local function Search(query)
     return found
 end
 
-ns.SearchEmoji = Search -- para tools/smoke_load.lua
+ns.SearchEmoji = Search -- para _project/tests/test_emojireact.lua
 
--- Nombre del emoji en el idioma del cliente (o en ingles)
-local function NameOf(file)
-    local base = ns.BaseOf(file)
-    local t = (ns.EMOJI_TEXT_LOCAL or {})[base] or (ns.EMOJI_TEXT_EN or {})[base]
-    return t and t[1] or ns.CodeOf(file)
-end
+local NameOf = ns.NameOf
 
 -- ==========================================
 -- VENTANA
@@ -94,7 +89,9 @@ end
 
 local picker = CreateFrame("Frame", "EmojiReactPicker", UIParent, "BasicFrameTemplateWithInset")
 picker:SetSize(WIDTH, HEIGHT)
-picker:SetFrameStrata("DIALOG")
+-- Por encima de cualquier ventana de chat (Chattynator y compania)
+picker:SetFrameStrata("FULLSCREEN_DIALOG")
+picker:SetToplevel(true)
 picker:SetClampedToScreen(true)
 picker:EnableMouse(true)
 picker:Hide()
@@ -370,16 +367,23 @@ function ns.TogglePicker()
         picker:Hide()
         return
     end
-    local editBox = DEFAULT_CHAT_FRAME.editBox
+    -- Encima de la caja de chat aunque este oculta: sigue colocada en su sitio
+    -- (Chattynator la oculta mientras no escribes). Sin caja, abajo a la izquierda.
+    local editBox = ns.ChatEditBox()
     picker:ClearAllPoints()
-    if editBox and editBox:IsShown() then
+    if editBox then
         picker:SetPoint("BOTTOMRIGHT", editBox, "TOPRIGHT", 0, 4)
     else
-        picker:SetPoint("BOTTOMLEFT", DEFAULT_CHAT_FRAME, "TOPLEFT", 0, 30)
+        picker:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 40, 220)
     end
     search:SetText("")
     Refresh(false)
     SetActiveTab(#ns.db.recent > 0 and 1 or 2)
     ShowPreview(nil)
     picker:Show()
+end
+
+-- Lo llama el atajo de Bindings.xml
+function EmojiReact_TogglePicker()
+    ns.TogglePicker()
 end

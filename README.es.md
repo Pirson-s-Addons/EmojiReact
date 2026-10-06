@@ -36,7 +36,7 @@
 - **Panel de emojis como el de WhatsApp** desde un botón en la caja de chat: buscador en tu idioma, categorías, recientes y tonos de piel (clic derecho en un emoji).
 - **Reacciones con imágenes propias**, distintas de los emojis del chat.
 - También convierte los emoticonos clásicos (`:)`, `:D`, `<3`...) sin tocar enlaces ni URLs.
-- Rueda de reacciones igual que la **Ping Wheel** del propio juego: mantén **la tecla que tú elijas** (tecla, combinación o botón del ratón), apunta con el ratón hacia una reacción y suelta; soltando en la X del centro se cancela. 6 páginas de 4 reacciones que cambias con la rueda del ratón, todas elegidas por ti.
+- Rueda de reacciones igual que la **Ping Wheel** del propio juego: mantén **la tecla que tú elijas** (tecla, combinación o botón del ratón), apunta con el ratón hacia una reacción y suelta; soltando en la X del centro se cancela. Páginas de 4 reacciones (una por cada 4 imágenes de reacción) que cambias con la rueda del ratón, todas elegidas por ti.
 - Los ajustes están en el panel del propio juego, **Opciones → AddOns**: tamaños, qué convertir, la tecla de la rueda, sus reacciones y la altura de tu propia reacción.
 - Ligero, sin librerías.
 
@@ -48,8 +48,9 @@
 
 ## Uso
 
-- `/emoji` abre los ajustes. `/emoji key` elige la tecla de la rueda. `/emoji test` muestra una reacción encima de ti.
-- **Opciones → AddOns → Emoji & React → General**: chat, bocadillos, tamaños, tecla y reacciones de la rueda.
+- `/emoji` abre los ajustes. `/emoji wheel` abre el panel de reacciones. `/emoji panel` abre el panel de emojis (también desde el botón de la caja de chat o su atajo de teclado). `/emoji key` elige la tecla de la rueda. `/emoji test` muestra una reacción encima de ti.
+- **Opciones → AddOns → Emoji & React → General**: chat y bocadillos.
+- **Opciones → AddOns → Emoji & React → Reacciones**: la rueda tal como se ve en el juego. Haz clic en un hueco y elige su reacción, añade o quita páginas, y ajusta la tecla, los tamaños y la altura.
 - Para ver las reacciones de **los demás**, activa *Mostrar nombres de jugadores amistosos* en el mismo panel: salen encima de su placa de nombre.
 
 ## Notas

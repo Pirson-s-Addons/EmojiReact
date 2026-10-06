@@ -18,6 +18,7 @@ ns.DEFAULTS = {
     chatSize = 16,
     bubbleSize = 22,
     reactions = true,
+    hideReactions = false, -- no mostrar las reacciones de los demas
     reactionSize = 56,
     selfHeight = 170,
     wheelScale = 1,
@@ -26,12 +27,11 @@ ns.DEFAULTS = {
     page = 1,
 }
 
--- Huecos de la rueda (ns.PAGES x ns.SLOTS; en cada pagina: arriba, izquierda,
+-- Huecos de la rueda (db.pages x ns.SLOTS; en cada pagina: arriba, izquierda,
 -- abajo, derecha): las reacciones en orden, repitiendo si faltan
+ns.DEFAULTS.pages = ns.PAGES
 ns.DEFAULTS.slots = {}
-for i = 1, ns.PAGES * ns.SLOTS do
-    ns.DEFAULTS.slots[i] = ns.REACTIONS[(i - 1) % #ns.REACTIONS + 1]
-end
+for i = 1, ns.PAGES * ns.SLOTS do ns.DEFAULTS.slots[i] = ns.DefaultSlot(i) end
 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
@@ -42,11 +42,15 @@ frame:SetScript("OnEvent", function(self, _, name)
     for key, value in pairs(ns.DEFAULTS) do
         if db[key] == nil then db[key] = type(value) == "table" and CopyTable(value) or value end
     end
-    -- Huecos nuevos (la rueda empezo con 8) o con un emoji quitado de la lista
-    for i, code in ipairs(ns.DEFAULTS.slots) do
-        if not ns.REACTION_VALID[db.slots[i] or ""] then db.slots[i] = code end
+    -- Paginas fuera de rango, huecos que faltan o con una reaccion quitada de la
+    -- lista, y huecos de mas
+    if type(db.pages) ~= "number" or db.pages < 1 then db.pages = ns.PAGES end
+    db.pages = math.min(math.floor(db.pages), ns.MAX_PAGES)
+    for i = 1, db.pages * ns.SLOTS do
+        if not ns.REACTION_VALID[db.slots[i] or ""] then db.slots[i] = ns.DefaultSlot(i) end
     end
-    if db.page > ns.PAGES then db.page = 1 end
+    for i = #db.slots, db.pages * ns.SLOTS + 1, -1 do db.slots[i] = nil end
+    if db.page > db.pages then db.page = 1 end
     ns.db = db
 
     ns.InitChat()

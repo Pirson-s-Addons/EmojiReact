@@ -8,15 +8,17 @@ local L = ns.L
 -- personaje y, en la pantalla de los jugadores cercanos que tengan el addon,
 -- encima de ti.
 --
--- Envio: primero se prueba SendAddonMessage por "SAY" (alcance de /decir, lo
--- ideal). En la API moderna puede no estar permitido (InvalidChatType); en ese
--- caso todos los que tienen el addon comparten un canal de chat oculto y solo
--- se pinta la reaccion si el que la envia tiene la placa de nombre visible,
--- o sea, si esta cerca.
+-- Envio: mensaje de addon (invisible, sin pulsacion real) al grupo ("PARTY",
+-- "RAID" o "INSTANCE_CHAT") y por susurro ("WHISPER") a cada jugador cercano
+-- con placa visible que no este en el grupo: son justo los unicos sobre los que
+-- se puede pintar. Probado en la beta (con un modo de depuracion ya quitado): por "SAY" no llega ni
+-- la copia propia, y por un canal propio solo vuelve la propia, a los demas no.
+-- Solo se pinta la reaccion si el que la envia tiene la placa visible.
 --
 -- Donde se pinta: sobre la placa de nombre (nameplate) del que reacciona. Por
--- eso hace falta ver las placas de jugadores amistosos, y por eso no se ve en
--- mazmorras y bandas: ahi Blizzard prohibe a los addons tocar las placas.
+-- eso, si el jugador no tiene las placas amistosas puestas, el addon las
+-- enciende solo mientras dura la reaccion (ver PLACAS AL REACCIONAR), y por eso
+-- no se ve en mazmorras y bandas: ahi Blizzard prohibe a los addons tocar las placas.
 -- Tu propio personaje no tiene placa: tu reaccion va encima del centro de la
 -- pantalla, a la altura que elijas.
 --
@@ -24,20 +26,23 @@ local L = ns.L
 -- ANTES de comparar o preguntar si son nil.
 -- Contrastado con Gethe/wow-ui-source, rama "forever".
 
-local PREFIX, CHANNEL = "EmojiReact", "EmojiReactRX"
+local PREFIX = "EmojiReact"
+-- Canal de las primeras versiones (no repartia los mensajes): se abandona al entrar
+local OLD_CHANNEL = "EmojiReactRX"
+local WHISPER_MAX = 10 -- susurros por reaccion, por debajo del limite de mensajes
 local BINDING = "EMOJIREACT_WHEEL"
 local CanAccess = canaccessvalue or function() return true end
-local useChannel = false
 local lastSent = 0
 
 BINDING_HEADER_EMOJIREACT = "Emoji & React"
 BINDING_NAME_EMOJIREACT_WHEEL = L.BINDING_WHEEL
+BINDING_NAME_EMOJIREACT_PICKER = L.BINDING_PICKER
 
 -- ==========================================
 -- PINTAR LA REACCION
 -- ==========================================
 
-local function Pop(anchor, code, point, x, y)
+local function Pop(anchor, code, point, relPoint, x, y)
     local p = anchor.emojiReactPop
     if not p then
         p = CreateFrame("Frame", nil, anchor)
@@ -63,7 +68,7 @@ local function Pop(anchor, code, point, x, y)
     end
     p:SetSize(ns.db.reactionSize, ns.db.reactionSize)
     p:ClearAllPoints()
-    p:SetPoint(point, anchor, point, x, y)
+    p:SetPoint(point, anchor, relPoint, x, y)
     p.tex:SetTexture(ns.REACTION .. code)
     p:Show()
     p.anim:Stop()
@@ -72,64 +77,223 @@ end
 
 -- La placa se busca por unidad (nameplate1..40): la estructura interna de las
 -- placas cambio en la API moderna y asi no depende de ella.
-local function ShowOnPlayer(name, code)
+-- El que reacciona se identifica por su GUID, que va en el mensaje: los nombres
+-- de Forever llevan espacio ("Davonna Davour") y el remitente de CHAT_MSG_ADDON
+-- no viene escrito igual que UnitName (probado en la beta: ni se descartaban
+-- las reacciones propias ni se encontraba la placa del otro).
+
+local function ShowOnPlayer(guid, code)
     for i = 1, 40 do
         local unit = "nameplate" .. i
         if UnitExists(unit) and UnitIsPlayer(unit) then
-            local unitName = GetUnitName(unit, true)
-            if CanAccess(unitName) and unitName == name then
+            local unitGUID = UnitGUID(unit)
+            if CanAccess(unitGUID) and unitGUID == guid then
                 local plate = C_NamePlate.GetNamePlateForUnit(unit)
-                if plate then Pop(plate, code, "BOTTOM", 0, 20) end
-                return
+                -- Encima de la placa, sin tapar el nombre (probado en la beta)
+                if plate then
+                    Pop(plate, code, "BOTTOM", "TOP", 0, 2)
+                    -- Con el nombre imitado, justo encima de el (la placa es mas alta)
+                    local label = plate.emojiReactName
+                    if label and label:IsShown() then
+                        plate.emojiReactPop:ClearAllPoints()
+                        plate.emojiReactPop:SetPoint("BOTTOM", label, "TOP", 0, 4)
+                    end
+                end
+                return plate ~= nil
             end
         end
     end
     -- Sin placa visible: esta lejos o las placas amistosas estan apagadas
+    return false
 end
 
 function ns.ShowOnSelf(code)
-    Pop(UIParent, code or ns.db.slots[1], "CENTER", 0, ns.db.selfHeight)
+    Pop(UIParent, code or ns.db.slots[1], "CENTER", "CENTER", 0, ns.db.selfHeight)
 end
 
 -- ==========================================
 -- ENVIO Y RECEPCION
 -- ==========================================
 
-local function IsSuccess(result) return result == true or result == 0 end
+local function GroupChannel()
+    if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then return "INSTANCE_CHAT" end
+    if IsInRaid() then return "RAID" end
+    if IsInGroup() then return "PARTY" end
+end
 
 function ns.React(code)
     if not ns.db.reactions or not ns.REACTION_VALID[code] or GetTime() - lastSent < 1.5 then return end
     lastSent = GetTime()
     ns.ShowOnSelf(code)
-    local msg = "R:" .. code
-    if not useChannel then
-        C_ChatInfo.SendAddonMessage(PREFIX, msg, "SAY")
-    else
-        -- Enviar a un canal pide una pulsacion real: llega desde la tecla o el clic
-        local id = GetChannelName(CHANNEL)
-        if id and id > 0 then C_ChatInfo.SendChatMessage(msg, "CHANNEL", nil, id) end
+    local msg = "R:" .. code .. ":" .. UnitGUID("player")
+    local group = GroupChannel()
+    if group then C_ChatInfo.SendAddonMessage(PREFIX, msg, group) end
+    -- Jugadores cercanos con placa que no reciben por el grupo
+    local whispers = 0
+    for i = 1, 40 do
+        if whispers >= WHISPER_MAX then break end
+        local unit = "nameplate" .. i
+        if UnitExists(unit) and UnitIsPlayer(unit) and not UnitIsUnit(unit, "player")
+            and not (group and (UnitInParty(unit) or UnitInRaid(unit))) then
+            local name = GetUnitName(unit, true)
+            if CanAccess(name) and name then
+                C_ChatInfo.SendAddonMessage(PREFIX, msg, "WHISPER", name)
+                whispers = whispers + 1
+            end
+        end
     end
 end
 
--- Para /emoji status: por donde viajan las reacciones en este cliente
-function ns.Status()
-    local mode = useChannel and L.STATUS_CHANNEL:format(CHANNEL, GetChannelName(CHANNEL)) or L.STATUS_SAY
-    print(L.CHAT_PREFIX .. L.STATUS:format(mode, ns.CurrentKey(), GetCVarBool("nameplateShowFriendlyPlayers") and YES or NO))
+local seen = {} -- GUID -> momento de su ultima reaccion (copias repetidas)
+
+local function Receive(text)
+    if not ns.db.reactions or ns.db.hideReactions or not CanAccess(text) then return end
+    local code, guid = text:match("^R:([%w_]+):(.+)$")
+    if not code or guid == UnitGUID("player") or not ns.REACTION_VALID[code] then return end
+    if seen[guid] and GetTime() - seen[guid] < 1 then return end
+    seen[guid] = GetTime()
+    if not ShowOnPlayer(guid, code) then ns.ShowWithTempPlates(guid, code) end
 end
 
-local function Receive(text, sender)
-    if not ns.db.reactions or not CanAccess(text, sender) then return end
-    local name = Ambiguate(sender, "none")
-    if name == UnitName("player") then return end
-    local code = text:match("^R:([%w_]+)$")
-    if code and ns.REACTION_VALID[code] then ShowOnPlayer(name, code) end
+-- ==========================================
+-- PLACAS AL REACCIONAR
+-- ==========================================
+-- Un addon no puede saber donde esta otro jugador en pantalla: solo su placa.
+-- Con las placas amistosas apagadas, el cliente pinta el nombre normal y no hay
+-- placa; con ellas encendidas, deja de pintar ese nombre (probado en la beta:
+-- las placas transparentes dejaban a los jugadores sin nombre). Asi que no se
+-- tocan: al llegar una reaccion de alguien sin placa se encienden las placas
+-- (solo nombre) lo que dura la reaccion y luego se devuelven como estaban.
+-- Su placa aparece unos fotogramas despues: la reaccion espera en `waiting`.
+
+local FRIENDLY, ONLY_NAME = "nameplateShowFriendlyPlayers", "nameplateShowOnlyNameForFriendlyPlayerUnits"
+local SHOW_TIME = 3.5   -- la animacion de la reaccion dura 3 s
+local WAIT_PLATE = 1.5  -- lo que se espera a que aparezca la placa
+local waiting = {}      -- GUID -> { code, hasta cuando }
+local saved             -- CVars del jugador mientras las placas son del addon
+local restoreAt = 0
+local restorePending, combatFailed = false, false
+
+local function SetPlateCVar(name, value)
+    if C_CVar and C_CVar.SetCVar then return C_CVar.SetCVar(name, value) ~= false end
+    SetCVar(name, value)
+    return true
 end
 
--- El canal oculto no sale en ninguna ventana de chat, ni sus avisos de entrada
-local function IsOurChannel(_, _, ...)
+local function RestorePlates()
+    if not saved then return end
+    if InCombatLockdown() then
+        restorePending = true
+        return
+    end
+    SetPlateCVar(FRIENDLY, saved.friendly)
+    SetPlateCVar(ONLY_NAME, saved.onlyName)
+    saved = nil
+end
+
+-- Devuelve true si la reaccion se pintara en cuanto aparezca su placa
+function ns.ShowWithTempPlates(guid, code)
+    -- Ya tiene las placas puestas (por su cuenta): el otro esta lejos
+    if not saved and GetCVarBool(FRIENDLY) then return false end
+    if not saved then
+        -- En combate el cliente puede no dejar cambiarlas: un intento por combate
+        if combatFailed then return false end
+        local before = { friendly = GetCVar(FRIENDLY), onlyName = GetCVar(ONLY_NAME) }
+        if not (SetPlateCVar(FRIENDLY, "1") and GetCVarBool(FRIENDLY)) then
+            combatFailed = InCombatLockdown()
+            return false
+        end
+        SetPlateCVar(ONLY_NAME, "1") -- solo el nombre: lo minimo para anclarla
+        saved = before
+    end
+    waiting[guid] = { code, GetTime() + WAIT_PLATE }
+    restoreAt = GetTime() + WAIT_PLATE + SHOW_TIME
+    C_Timer.After(WAIT_PLATE + SHOW_TIME + 0.1, function()
+        if GetTime() >= restoreAt then RestorePlates() end
+    end)
+    return true
+end
+
+-- Mientras las placas son del addon, imitan el nombre normal del juego: se
+-- oculta lo que pintan (Blizzard o un addon de placas) y se pone el nombre con
+-- su hermandad debajo, en letra pequena con contorno y el color de los
+-- jugadores amistosos. Todo vuelve a su estado al quitar la placa (se reciclan).
+local NAME_COLOR = { 0.55, 0.55, 1 }
+
+local function HookAlpha(child)
+    if child.emojiReactHooked then return end
+    child.emojiReactHooked = true
+    hooksecurefunc(child, "SetAlpha", function(self, alpha)
+        if self.emojiReactHide and alpha > 0 then self:SetAlpha(0) end
+    end)
+end
+
+local function MimicName(plate, unit)
+    for _, child in ipairs({ plate:GetChildren() }) do
+        if child ~= plate.emojiReactPop then
+            HookAlpha(child)
+            child.emojiReactHide = true
+            child:SetAlpha(0)
+        end
+    end
+    local label = plate.emojiReactName
+    if not label then
+        label = plate:CreateFontString(nil, "OVERLAY")
+        label:SetFont(STANDARD_TEXT_FONT, 10, "OUTLINE")
+        label:SetPoint("BOTTOM", plate, "BOTTOM", 0, 4)
+        label:SetJustifyH("CENTER")
+        plate.emojiReactName = label
+    end
+    -- GetUnitName como las placas de Blizzard: en Forever trae el apellido
+    -- ("Tengo Fimosis"); UnitName solo da el nombre ("Tengo")
+    local name, guild = GetUnitName(unit, false), GetGuildInfo(unit)
+    if not CanAccess(name, guild) or not name then return end
+    label:SetText(guild and (name .. "\n<" .. guild .. ">") or name)
+    label:SetTextColor(NAME_COLOR[1], NAME_COLOR[2], NAME_COLOR[3])
+    label:Show()
+end
+
+local function UnmimicName(plate)
+    if plate.emojiReactName then plate.emojiReactName:Hide() end
+    for _, child in ipairs({ plate:GetChildren() }) do
+        if child.emojiReactHide then
+            child.emojiReactHide = false
+            child:SetAlpha(1)
+        end
+    end
+end
+
+local function OnPlateAdded(unit)
+    local guid = UnitGUID(unit)
+    if not CanAccess(guid) or not guid then return end
+    local plate = C_NamePlate.GetNamePlateForUnit(unit)
+    if saved and plate and UnitIsPlayer(unit) and UnitIsFriend("player", unit) then
+        MimicName(plate, unit)
+        -- Los addons de placas montan lo suyo despues del evento
+        C_Timer.After(0, function()
+            if saved and C_NamePlate.GetNamePlateForUnit(unit) == plate then MimicName(plate, unit) end
+        end)
+    end
+    local wait = waiting[guid]
+    if not wait then return end
+    waiting[guid] = nil
+    if GetTime() <= wait[2] then ShowOnPlayer(guid, wait[1]) end
+end
+
+-- Version anterior (placas invisibles siempre): devolver los ajustes del jugador
+local function RestoreOldVersion()
+    local old = ns.db.savedCVars
+    if not old or InCombatLockdown() then return end
+    SetPlateCVar(FRIENDLY, old.friendly)
+    SetPlateCVar(ONLY_NAME, old.onlyName)
+    ns.db.savedCVars = nil
+end
+
+-- El aviso de abandonar el canal antiguo no sale en ninguna ventana de chat
+local function IsOldChannel(_, _, ...)
     if not CanAccess(...) then return false end
     local channelString, baseName = select(4, ...), select(9, ...)
-    return baseName == CHANNEL or (channelString or ""):find(CHANNEL, 1, true) ~= nil
+    return baseName == OLD_CHANNEL or (channelString or ""):find(OLD_CHANNEL, 1, true) ~= nil
 end
 
 -- ==========================================
@@ -201,38 +365,44 @@ end
 
 function ns.InitReactions()
     C_ChatInfo.RegisterAddonMessagePrefix(PREFIX)
-    ChatFrameUtil.AddMessageEventFilter("CHAT_MSG_CHANNEL", IsOurChannel)
-    ChatFrameUtil.AddMessageEventFilter("CHAT_MSG_CHANNEL_NOTICE", IsOurChannel)
+    ChatFrameUtil.AddMessageEventFilter("CHAT_MSG_CHANNEL_NOTICE", IsOldChannel)
 
     local hinted = false
     local frame = CreateFrame("Frame")
     frame:RegisterEvent("PLAYER_ENTERING_WORLD")
     frame:RegisterEvent("CHAT_MSG_ADDON")
-    frame:RegisterEvent("CHAT_MSG_CHANNEL")
     frame:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
+    frame:RegisterEvent("NAME_PLATE_UNIT_ADDED")
+    frame:RegisterEvent("PLAYER_REGEN_ENABLED")
+    frame:RegisterEvent("PLAYER_LOGOUT")
     frame:SetScript("OnEvent", function(_, event, ...)
         if event == "PLAYER_ENTERING_WORLD" then
-            -- Prueba si este cliente deja mensajes de addon por "SAY"; si no, canal oculto
-            local result = C_ChatInfo.SendAddonMessage(PREFIX, "P", "SAY")
-            useChannel = not IsSuccess(result) and result ~= Enum.SendAddonMessageResult.AddonMessageThrottle
-            if useChannel and GetChannelName(CHANNEL) == 0 then
-                (JoinTemporaryChannel or JoinPermanentChannel)(CHANNEL)
-            end
+            if GetChannelName(OLD_CHANNEL) > 0 then LeaveChannelByName(OLD_CHANNEL) end
+            RestoreOldVersion()
             if ns.db.reactions and not GetBindingKey(BINDING) and not hinted then
                 hinted = true
                 print(L.CHAT_PREFIX .. L.KEY_HINT)
             end
         elseif event == "CHAT_MSG_ADDON" then
-            local prefix, text, _, sender = ...
-            if CanAccess(prefix) and prefix == PREFIX then Receive(text, sender) end
-        elseif event == "CHAT_MSG_CHANNEL" then
-            local text, sender = ...
-            local baseName = select(9, ...)
-            if CanAccess(baseName) and baseName == CHANNEL then Receive(text, sender) end
+            local prefix, text = ...
+            if CanAccess(prefix) and prefix == PREFIX then Receive(text) end
         elseif event == "NAME_PLATE_UNIT_REMOVED" then
             -- Las placas se reciclan: que la reaccion no se quede sobre otra unidad
             local plate = C_NamePlate.GetNamePlateForUnit(...)
             if plate and plate.emojiReactPop then plate.emojiReactPop:Hide() end
+            if plate then UnmimicName(plate) end
+        elseif event == "NAME_PLATE_UNIT_ADDED" then
+            OnPlateAdded(...)
+        elseif event == "PLAYER_REGEN_ENABLED" then
+            combatFailed = false
+            if restorePending then
+                restorePending = false
+                RestorePlates()
+            end
+        elseif event == "PLAYER_LOGOUT" and saved then
+            -- Que no se queden encendidas si se sale a mitad de una reaccion
+            SetCVar(FRIENDLY, saved.friendly)
+            SetCVar(ONLY_NAME, saved.onlyName)
         end
     end)
 end

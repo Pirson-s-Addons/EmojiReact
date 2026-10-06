@@ -2,4 +2,7 @@
 	<Binding name="EMOJIREACT_WHEEL" header="EMOJIREACT" runOnUp="true">
 		EmojiReact_Wheel(keystate)
 	</Binding>
+	<Binding name="EMOJIREACT_PICKER">
+		EmojiReact_TogglePicker()
+	</Binding>
 </Bindings>

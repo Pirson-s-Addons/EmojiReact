@@ -9,6 +9,7 @@ local L = ns.L
 -- ella como subcategorias.
 
 local MARGIN_X = 16
+local MARGIN_RIGHT = 38 -- el mismo que el logo del panel General
 local BRAND = "|cffd597ff"
 local GOLD = "|cffffff00"
 local HEADER = "|cffC47FF3"
@@ -92,7 +93,7 @@ function ns.CreateAbout(info)
 
     local desc = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
     desc:SetPoint("TOPLEFT", MARGIN_X, -160)
-    desc:SetWidth(560)
+    desc:SetPoint("TOPRIGHT", -MARGIN_RIGHT, -160)
     desc:SetJustifyH("LEFT")
     desc:SetText(L.ABOUT_DESC)
 
@@ -108,7 +109,7 @@ function ns.CreateAbout(info)
 
         local text = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
         text:SetPoint("TOPLEFT", MARGIN_X + 160, y)
-        text:SetWidth(400)
+        text:SetPoint("TOPRIGHT", -MARGIN_RIGHT, y)
         text:SetJustifyH("LEFT")
         text:SetText(entry[2])
 

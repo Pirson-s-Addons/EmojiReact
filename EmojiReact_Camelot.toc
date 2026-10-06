@@ -16,6 +16,39 @@
 ## Category-ruRU: Чат
 ## Category-zhCN: 聊天
 ## Category-zhTW: 對話
+## Category-plPL: Czat
+## Category-svSE: Chatt
+## Category-noNO: Chat
+## Category-csCZ: Chat
+## Category-nlNL: Chat
+## Category-roRO: Chat
+## Category-huHU: Chat
+## Category-elGR: Chat
+## Category-ukUA: Чат
+## Category-daDK: Chat
+## Category-fiFI: Chat
+## Category-skSK: Chat
+## Category-bgBG: Чат
+## Category-hrHR: Chat
+## Category-srRS: Чет
+## Category-slSI: Klepet
+## Category-ltLT: Pokalbiai
+## Category-lvLV: Tērzēšana
+## Category-etEE: Vestlus
+## Category-idID: Obrolan
+## Category-msMY: Sembang
+## Category-faIR: چت
+## Category-heIL: צ'אט
+## Category-bnBD: চ্যাট
+## Category-urPK: چیٹ
+## Category-taIN: அரட்டை
+## Category-teIN: చాట్
+## Category-trTR: Sohbet
+## Category-jaJP: チャット
+## Category-arSA: الدردشة
+## Category-hiIN: चैट
+## Category-thTH: แชท
+## Category-viVN: Trò chuyện
 
 ## Notes: |cFF33CCFFEmojis in chat and speech bubbles, plus a reaction wheel like the game's Ping Wheel that shows reactions above your character.|r
 ## Notes-deDE: |cFF33CCFFEmojis im Chat und in Sprechblasen, dazu ein Reaktionsrad wie das Ping-Rad des Spiels, das Reaktionen über deinem Charakter zeigt.|r
@@ -28,14 +61,65 @@
 ## Notes-ruRU: |cFF33CCFFЭмодзи в чате и в облачках речи, а также колесо реакций как колесо меток в игре, показывающее реакции над вашим персонажем.|r
 ## Notes-zhCN: |cFF33CCFF在聊天和对话气泡中显示表情符号，并提供类似游戏标记轮盘的反应轮盘，在角色头顶显示反应。|r
 ## Notes-zhTW: |cFF33CCFF在聊天和對話泡泡中顯示表情符號，並提供類似遊戲標記輪盤的反應輪盤，在角色頭頂顯示反應。|r
+## Notes-plPL: |cFF33CCFFEmoji na czacie i w dymkach, a do tego koło reakcji jak koło pingów w grze, które pokazuje reakcje nad twoją postacią.|r
+## Notes-svSE: |cFF33CCFFEmojis i chatten och i pratbubblor, plus ett reaktionshjul som spelets pinghjul som visar reaktioner ovanför din karaktär.|r
+## Notes-noNO: |cFF33CCFFEmojier i chatten og i snakkebobler, pluss et reaksjonshjul som spillets pinghjul som viser reaksjoner over karakteren din.|r
+## Notes-csCZ: |cFF33CCFFEmoji v chatu a v bublinách, k tomu kolo reakcí jako kolo pingů ve hře, které ukazuje reakce nad tvou postavou.|r
+## Notes-nlNL: |cFF33CCFFEmoji's in de chat en in tekstballonnen, plus een reactiewiel zoals het pingwiel van het spel dat reacties boven je personage toont.|r
+## Notes-roRO: |cFF33CCFFEmoji în chat și în bulele de dialog, plus o roată de reacții ca roata de ping a jocului, care arată reacțiile deasupra personajului tău.|r
+## Notes-huHU: |cFF33CCFFEmojik a csevegésben és a szövegbuborékokban, valamint egy reakciókerék, mint a játék pingkereke, amely a karaktered fölött mutatja a reakciókat.|r
+## Notes-elGR: |cFF33CCFFEmoji στη συνομιλία και στα συννεφάκια ομιλίας, μαζί με έναν τροχό αντιδράσεων σαν τον τροχό ping του παιχνιδιού που δείχνει αντιδράσεις πάνω από τον χαρακτήρα σου.|r
+## Notes-ukUA: |cFF33CCFFЕмодзі в чаті та в хмаринках мовлення, а також колесо реакцій як колесо позначок у грі, що показує реакції над твоїм персонажем.|r
+## Notes-daDK: |cFF33CCFFEmojis i chatten og i talebobler, plus et reaktionshjul som spillets pinghjul, der viser reaktioner over din karakter.|r
+## Notes-fiFI: |cFF33CCFFEmojit chattiin ja puhekupliin sekä reaktiopyörä kuten pelin ping-pyörä, joka näyttää reaktiot hahmosi yläpuolella.|r
+## Notes-skSK: |cFF33CCFFEmoji v chate a v bublinách, k tomu koleso reakcií ako koleso pingov v hre, ktoré ukazuje reakcie nad tvojou postavou.|r
+## Notes-bgBG: |cFF33CCFFЕмоджи в чата и в балончетата с реч, плюс колело за реакции като колелото за сигнали в играта, което показва реакции над героя ти.|r
+## Notes-hrHR: |cFF33CCFFEmojiji u chatu i u oblačićima govora, plus kotač reakcija poput kotača pingova u igri koji prikazuje reakcije iznad tvog lika.|r
+## Notes-srRS: |cFF33CCFFEmodžiji u četu i u oblačićima govora, plus točak reakcija poput točka pingova u igri koji prikazuje reakcije iznad tvog lika.|r
+## Notes-slSI: |cFF33CCFFEmojiji v klepetu in v oblačkih govora ter kolo odzivov, kot je kolo pingov v igri, ki prikazuje odzive nad tvojim likom.|r
+## Notes-ltLT: |cFF33CCFFJaustukai pokalbiuose ir kalbos burbuluose, taip pat reakcijų ratas kaip žaidimo pingų ratas, rodantis reakcijas virš tavo veikėjo.|r
+## Notes-lvLV: |cFF33CCFFEmocijzīmes tērzēšanā un runas burbuļos, kā arī reakciju ritenis kā spēles pingu ritenis, kas rāda reakcijas virs tava tēla.|r
+## Notes-etEE: |cFF33CCFFEmojid vestluses ja jutumullides ning reaktsiooniratas nagu mängu pingiratas, mis näitab reaktsioone su tegelase kohal.|r
+## Notes-idID: |cFF33CCFFEmoji di obrolan dan balon percakapan, plus roda reaksi seperti roda ping game yang menampilkan reaksi di atas karaktermu.|r
+## Notes-msMY: |cFF33CCFFEmoji dalam sembang dan belon pertuturan, serta roda reaksi seperti roda ping permainan yang menunjukkan reaksi di atas watak anda.|r
+## Notes-faIR: |cFF33CCFFایموجی در چت و حباب‌های گفتار، به‌همراه چرخ واکنش مانند چرخ پینگ بازی که واکنش‌ها را بالای شخصیت شما نشان می‌دهد.|r
+## Notes-heIL: |cFF33CCFFאימוג'י בצ'אט ובבועות הדיבור, וגם גלגל תגובות כמו גלגל הפינג של המשחק שמציג תגובות מעל הדמות שלך.|r
+## Notes-bnBD: |cFF33CCFFচ্যাট ও কথার বুদবুদে ইমোজি, সাথে গেমের পিং হুইলের মতো একটি রিঅ্যাকশন হুইল যা তোমার চরিত্রের উপরে রিঅ্যাকশন দেখায়।|r
+## Notes-urPK: |cFF33CCFFچیٹ اور بات کے غباروں میں ایموجی، ساتھ میں گیم کے پنگ وہیل جیسا ری ایکشن وہیل جو آپ کے کردار کے اوپر ری ایکشن دکھاتا ہے۔|r
+## Notes-taIN: |cFF33CCFFஅரட்டையிலும் பேச்சுக் குமிழ்களிலும் எமோஜிகள், கூடவே விளையாட்டின் பிங் சக்கரம் போன்ற எதிர்வினை சக்கரம், உங்கள் கதாபாத்திரத்தின் மேல் எதிர்வினைகளைக் காட்டுகிறது.|r
+## Notes-teIN: |cFF33CCFFచాట్‌లో మరియు మాటల బుడగల్లో ఎమోజీలు, అలాగే గేమ్ పింగ్ వీల్ లాంటి రియాక్షన్ వీల్, మీ పాత్ర పైన రియాక్షన్లను చూపిస్తుంది.|r
+## Notes-trTR: |cFF33CCFFSohbette ve konuşma balonlarında emojiler, ayrıca oyunun işaret çarkı gibi karakterinin üstünde tepkiler gösteren bir tepki çarkı.|r
+## Notes-jaJP: |cFF33CCFFチャットと吹き出しに絵文字を表示し、ゲームのピンホイールのようなリアクションホイールでキャラクターの上にリアクションを出します。|r
+## Notes-arSA: |cFF33CCFFرموز تعبيرية في الدردشة وفقاعات الكلام، مع عجلة تفاعلات مثل عجلة الإشارات في اللعبة تعرض التفاعلات فوق شخصيتك.|r
+## Notes-hiIN: |cFF33CCFFचैट और बोलने के गुब्बारों में इमोजी, साथ में गेम के पिंग व्हील जैसा रिएक्शन व्हील जो आपके किरदार के ऊपर रिएक्शन दिखाता है।|r
+## Notes-thTH: |cFF33CCFFอีโมจิในแชทและบอลลูนคำพูด พร้อมวงล้อรีแอคชันแบบวงล้อปิงของเกมที่แสดงรีแอคชันเหนือตัวละครของคุณ|r
+## Notes-viVN: |cFF33CCFFEmoji trong chat và bong bóng thoại, cùng vòng cảm xúc giống vòng ping của game hiện cảm xúc trên đầu nhân vật của bạn.|r
 
 ## SavedVariables: EmojiReactDB
 
-# Solo WoW Forever: el sufijo _Camelot es el game type que busca ese cliente, y
-# sin un .toc generico ningun otro cliente lista el addon.
+# Solo WoW Forever: el sufijo _Camelot es el game type que busca ese cliente.
+# EmojiReact.toc es copia exacta de este: la app de CurseForge exige <Carpeta>.toc
 
 Locales/enUS.lua
 Locales/esES.lua
+Locales/deDE.lua
+Locales/frFR.lua
+Locales/itIT.lua
+Locales/ptBR.lua
+Locales/ruRU.lua
+Locales/koKR.lua
+Locales/zhCN.lua
+Locales/zhTW.lua
+Locales/plPL.lua
+Locales/svSE.lua
+Locales/noNO.lua
+Locales/trTR.lua
+Locales/jaJP.lua
+Locales/arSA.lua
+Locales/hiIN.lua
+Locales/thTH.lua
+Locales/viVN.lua
+Locales/csCZ.lua
 Data/EmojiData.lua
 Data/Search_en.lua
 Data/Search_deDE.lua
