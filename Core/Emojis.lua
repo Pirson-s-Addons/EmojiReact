@@ -9,9 +9,12 @@ local ADDON_NAME, ns = ...
 
 ns.IMG = "Interface\\AddOns\\" .. ADDON_NAME .. "\\img\\"
 ns.EMOJI = ns.IMG .. "emoji\\"
+-- Las reacciones son otro juego de imagenes: el mismo emoji en estilo pegatina
+-- (borde blanco y sombra, 128x128), para que no se confundan con los del chat.
+ns.REACTION = ns.IMG .. "reaction\\"
 
 -- { codigo, codepoint de Twemoji }. Este orden es el de la cuadricula.
--- tools/make_textures.sh lee esta lista para generar las imagenes.
+-- tools/make_textures.py lee esta lista para generar las imagenes (chat y reacciones).
 ns.EMOJIS = {
     { "smile", "1f604" }, { "grin", "1f601" }, { "joy", "1f602" }, { "rofl", "1f923" },
     { "sweat_smile", "1f605" }, { "wink", "1f609" }, { "blush", "1f60a" }, { "heart_eyes", "1f60d" },

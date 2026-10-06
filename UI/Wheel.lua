@@ -41,7 +41,7 @@ local function Show()
     wheel:SelectionStart(wedges, false, nil)
     -- Sin atlas (icon = nil) la plantilla no toca el icono: se pone el emoji
     for _, wedge in ipairs(wheel.radialWheelWedgeButtons) do
-        wedge.Icon:SetTexture(ns.EMOJI .. wedge.type)
+        wedge.Icon:SetTexture(ns.REACTION .. wedge.type)
         wedge.Icon:SetSize(ICON, ICON)
     end
     pageText:SetText(L.PAGE_FMT:format(page, ns.PAGES))

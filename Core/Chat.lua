@@ -49,7 +49,8 @@ end
 -- CUADRICULA DE EMOJIS
 -- ==========================================
 -- Una sola ventana para todo: el boton de la caja de chat la usa para escribir
--- el emoji y las opciones para elegir el de cada hueco de la rueda.
+-- el emoji y las opciones para elegir el de cada hueco de la rueda. Cada uno
+-- la abre con sus imagenes: emojis del chat o pegatinas de reaccion.
 
 local COLS, CELL = 8, 28
 local grid = CreateFrame("Frame", "EmojiReactGrid", UIParent, "TooltipBackdropTemplate")
@@ -58,12 +59,14 @@ grid:SetFrameStrata("FULLSCREEN_DIALOG")
 grid:Hide()
 tinsert(UISpecialFrames, "EmojiReactGrid") -- Esc la cierra
 
+local cells = {}
 for i, e in ipairs(ns.EMOJIS) do
     local code = e[1]
     local b = CreateFrame("Button", nil, grid)
+    b.code = code
+    cells[i] = b
     b:SetSize(CELL - 2, CELL - 2)
     b:SetPoint("TOPLEFT", 6 + (i - 1) % COLS * CELL, -6 - math.floor((i - 1) / COLS) * CELL)
-    b:SetNormalTexture(ns.EMOJI .. code)
     b:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
     b:SetScript("OnClick", function()
         grid:Hide()
@@ -77,12 +80,14 @@ for i, e in ipairs(ns.EMOJIS) do
     b:SetScript("OnLeave", function() GameTooltip:Hide() end)
 end
 
--- Abre la cuadricula pegada a anchor; onPick(codigo) al elegir. Otro clic la cierra.
-function ns.ToggleEmojiGrid(anchor, onPick)
+-- Abre la cuadricula pegada a anchor con las imagenes de folder (ns.EMOJI o
+-- ns.REACTION); onPick(codigo) al elegir. Otro clic la cierra.
+function ns.ToggleEmojiGrid(anchor, onPick, folder)
     if grid:IsShown() and grid.anchor == anchor then
         grid:Hide()
         return
     end
+    for _, b in ipairs(cells) do b:SetNormalTexture(folder .. b.code) end
     grid.anchor, grid.onPick = anchor, onPick
     grid:ClearAllPoints()
     grid:SetPoint("BOTTOMRIGHT", anchor, "TOPRIGHT", 0, 4)
@@ -119,6 +124,6 @@ function ns.InitChat()
     pickerButton:SetPoint("RIGHT", -6, 0)
     pickerButton:SetNormalTexture(ns.EMOJI .. "smile")
     pickerButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
-    pickerButton:SetScript("OnClick", function(self) ns.ToggleEmojiGrid(self, InsertInChat) end)
+    pickerButton:SetScript("OnClick", function(self) ns.ToggleEmojiGrid(self, InsertInChat, ns.EMOJI) end)
     ns.ApplyPickerButton()
 end

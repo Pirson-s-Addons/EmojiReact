@@ -194,11 +194,11 @@ local function CreateGeneral()
         slot:SetScript("OnClick", function(self)
             ns.ToggleEmojiGrid(self, function(code)
                 db.slots[Index()] = code
-                self:SetNormalTexture(ns.EMOJI .. code)
-            end)
+                self:SetNormalTexture(ns.REACTION .. code)
+            end, ns.REACTION)
         end)
         AddTooltip(slot, L.SLOT_TOOLTIP)
-        slot.Refresh = function(self) self:SetNormalTexture(ns.EMOJI .. db.slots[Index()]) end
+        slot.Refresh = function(self) self:SetNormalTexture(ns.REACTION .. db.slots[Index()]) end
         widgets[#widgets + 1] = slot
         slots[i] = slot
     end
