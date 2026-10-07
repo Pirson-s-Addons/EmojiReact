@@ -355,36 +355,43 @@ local function CreateReactions()
     reactionWidgets[#reactionWidgets + 1] =
         ui.Checkbox("hideReactions", L.HIDE_REACTIONS, L.HIDE_REACTIONS_TOOLTIP, -394)
 
-    local keyLabel = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-    keyLabel:SetPoint("TOPLEFT", X + 4, -436)
-    keyLabel:SetText(L.KEY)
-    local keyButton
-    keyButton = ui.Button("", 130, L.KEY_TOOLTIP, function()
-        keyButton:SetText(L.KEY_WAITING)
-        ns.PickKey(function() keyButton:SetText(ns.CurrentKey()) end)
-    end)
-    keyButton:SetPoint("LEFT", keyLabel, "RIGHT", 10, 0)
-    keyButton.Refresh = function(self) self:SetText(ns.CurrentKey()) end
-    ui.widgets[#ui.widgets + 1] = keyButton
-    local clearButton = ui.Button(L.KEY_CLEAR, 70, nil, function()
-        ns.ClearKey()
-        keyButton:SetText(ns.CurrentKey())
-    end)
-    clearButton:SetPoint("LEFT", keyButton, "RIGHT", 4, 0)
+    -- Fila "etiqueta + tecla + Borrar" de un atajo (which: "wheel" o "page")
+    local function KeyRow(y, label, tooltip, which)
+        local text = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        text:SetPoint("TOPLEFT", X + 4, y)
+        text:SetText(label)
+        local button
+        button = ui.Button("", 130, tooltip, function()
+            button:SetText(L.KEY_WAITING)
+            ns.PickKey(function() button:SetText(ns.CurrentKey(which)) end, which)
+        end)
+        button:SetPoint("LEFT", text, "RIGHT", 10, 0)
+        button.Refresh = function(self) self:SetText(ns.CurrentKey(which)) end
+        ui.widgets[#ui.widgets + 1] = button
+        local clear = ui.Button(L.KEY_CLEAR, 70, nil, function()
+            ns.ClearKey(which)
+            button:SetText(ns.CurrentKey(which))
+        end)
+        clear:SetPoint("LEFT", button, "RIGHT", 4, 0)
+        reactionWidgets[#reactionWidgets + 1] = button
+        reactionWidgets[#reactionWidgets + 1] = clear
+    end
+    KeyRow(-436, L.KEY, L.KEY_TOOLTIP, "wheel")
+    KeyRow(-466, L.PAGE_KEY, L.PAGE_KEY_TOOLTIP, "page")
     local test = ui.Button(L.TEST, 120, L.TEST_TOOLTIP, function() ns.ShowOnSelf(db.slots[Index()]) end)
-    test:SetPoint("TOPLEFT", X + 4, -470)
+    test:SetPoint("TOPLEFT", X + 4, -498)
 
-    for _, widget in ipairs({ keyButton, clearButton, test,
+    for _, widget in ipairs({ test,
         ui.Slider("reactionSize", L.REACTION_SIZE, L.REACTION_SIZE_TOOLTIP, -380, 24, 128, 4),
         ui.Slider("selfHeight", L.SELF_HEIGHT, L.SELF_HEIGHT_TOOLTIP, -428, 0, 500, 10),
         ui.Slider("wheelScale", L.WHEEL_SCALE, L.WHEEL_SCALE_TOOLTIP, -476, 0.6, 1.6, 0.1) }) do
         reactionWidgets[#reactionWidgets + 1] = widget
     end
 
-    -- La tecla no se toca: es un atajo del juego y se quita con "Borrar"
-    ui.Separator(-512)
+    -- Las teclas no se tocan: son atajos del juego y se quitan con "Borrar"
+    ui.Separator(-534)
     ui.ResetButton({ "reactions", "hideReactions", "reactionSize", "selfHeight", "wheelScale", "slots", "pages", "page" },
-        -526, function() page, selected = 1, 1 end)
+        -548, function() page, selected = 1, 1 end)
     return ui.panel
 end
 

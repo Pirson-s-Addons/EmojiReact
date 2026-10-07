@@ -31,12 +31,14 @@ local PREFIX = "EmojiReact"
 local OLD_CHANNEL = "EmojiReactRX"
 local WHISPER_MAX = 10 -- susurros por reaccion, por debajo del limite de mensajes
 local BINDING = "EMOJIREACT_WHEEL"
+local PAGE_BINDING = "EMOJIREACT_PAGE"
 local CanAccess = canaccessvalue or function() return true end
 local lastSent = 0
 
 BINDING_HEADER_EMOJIREACT = "Emoji & React"
 BINDING_NAME_EMOJIREACT_WHEEL = L.BINDING_WHEEL
 BINDING_NAME_EMOJIREACT_PICKER = L.BINDING_PICKER
+BINDING_NAME_EMOJIREACT_PAGE = L.BINDING_PAGE
 
 -- ==========================================
 -- PINTAR LA REACCION
@@ -301,9 +303,14 @@ end
 -- ==========================================
 -- Ventana "pulsa la tecla que quieras". Se guarda como un atajo normal del
 -- juego, asi que tambien sale en Opciones > Atajos de teclado > AddOns.
+-- Dos atajos: abrir la rueda y pasar de pagina (ademas de la rueda del raton).
 
 local MODIFIERS = { LSHIFT = true, RSHIFT = true, LCTRL = true, RCTRL = true, LALT = true, RALT = true, UNKNOWN = true }
 local MOUSE = { MiddleButton = "BUTTON3", Button4 = "BUTTON4", Button5 = "BUTTON5" }
+local KEYS = {
+    wheel = { binding = BINDING, capture = L.KEY_CAPTURE, set = L.KEY_SET },
+    page = { binding = PAGE_BINDING, capture = L.PAGE_KEY_CAPTURE, set = L.PAGE_KEY_SET },
+}
 
 local capture = CreateFrame("Frame", nil, UIParent, "TooltipBackdropTemplate")
 capture:SetSize(400, 84)
@@ -315,29 +322,30 @@ capture:EnableMouse(true)
 capture:Hide()
 local captureText = capture:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 captureText:SetPoint("CENTER")
-captureText:SetText(L.KEY_CAPTURE)
 
-function ns.CurrentKey()
-    local key = GetBindingKey(BINDING)
+-- which: "wheel" (por defecto) o "page"
+function ns.CurrentKey(which)
+    local key = GetBindingKey(KEYS[which or "wheel"].binding)
     return key and GetBindingText(key) or L.KEY_NONE
 end
 
-local function Unbind()
-    for _, old in ipairs({ GetBindingKey(BINDING) }) do SetBinding(old) end
+local function Unbind(binding)
+    for _, old in ipairs({ GetBindingKey(binding) }) do SetBinding(old) end
 end
 
 local function Bind(key)
     capture:Hide()
     if key == "ESCAPE" then return end
     if InCombatLockdown() then print(L.CHAT_PREFIX .. L.KEY_COMBAT) return end
+    local info = KEYS[capture.which]
     -- Orden de modificadores que espera el juego: ALT-CTRL-SHIFT-
     local combo = (IsAltKeyDown() and "ALT-" or "") .. (IsControlKeyDown() and "CTRL-" or "") .. (IsShiftKeyDown() and "SHIFT-" or "") .. key
     local previous = GetBindingAction(combo)
-    Unbind()
-    SetBinding(combo, BINDING)
+    Unbind(info.binding)
+    SetBinding(combo, info.binding)
     SaveBindings(GetCurrentBindingSet())
-    local msg = L.CHAT_PREFIX .. L.KEY_SET:format(ns.CurrentKey())
-    if previous ~= "" and previous ~= BINDING then
+    local msg = L.CHAT_PREFIX .. info.set:format(ns.CurrentKey(capture.which))
+    if previous ~= "" and previous ~= info.binding then
         msg = msg .. " |cffff8800" .. L.KEY_REPLACED:format(_G["BINDING_NAME_" .. previous] or previous) .. "|r"
     end
     print(msg)
@@ -347,15 +355,16 @@ end
 capture:SetScript("OnKeyDown", function(_, key) if not MODIFIERS[key] then Bind(key) end end)
 capture:SetScript("OnMouseDown", function(_, button) if MOUSE[button] then Bind(MOUSE[button]) end end)
 
-function ns.PickKey(onDone)
+function ns.PickKey(onDone, which)
     if InCombatLockdown() then print(L.CHAT_PREFIX .. L.KEY_COMBAT) return end
-    capture.onDone = onDone
+    capture.which, capture.onDone = which or "wheel", onDone
+    captureText:SetText(KEYS[capture.which].capture)
     capture:Show()
 end
 
-function ns.ClearKey()
+function ns.ClearKey(which)
     if InCombatLockdown() then print(L.CHAT_PREFIX .. L.KEY_COMBAT) return end
-    Unbind()
+    Unbind(KEYS[which or "wheel"].binding)
     SaveBindings(GetCurrentBindingSet())
 end
 

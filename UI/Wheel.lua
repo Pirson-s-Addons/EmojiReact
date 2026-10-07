@@ -72,11 +72,17 @@ local function Show()
     pageText:SetText(L.PAGE_FMT:format(page, ns.db.pages))
 end
 
-wheel:SetScript("OnMouseWheel", function(_, delta)
+local function Turn(delta)
     ns.db.page = (ns.db.page - delta - 1) % ns.db.pages + 1
     Show()
     PlaySound(SOUNDKIT.IG_ABILITY_PAGE_TURN)
-end)
+end
+wheel:SetScript("OnMouseWheel", function(_, delta) Turn(delta) end)
+
+-- Atajo "pagina siguiente" de Bindings.xml: solo con la rueda abierta
+function EmojiReact_NextPage()
+    if wheel:IsShown() and not wheel.isWheelClosing then Turn(-1) end
+end
 
 -- Lo llama el atajo de Bindings.xml: pulsar abre en el raton, soltar elige
 function EmojiReact_Wheel(keystate)
