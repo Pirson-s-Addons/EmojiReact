@@ -30,19 +30,25 @@
 | `:)` `:D` `<3` `xD` | el emoji equivalente |
 | un emoji pegado (Win + .) | el emoji en vez de un cuadro vacío |
 
+| | |
+|---|---|
+| ![Reacciones encima de otros jugadores](.github/screenshots/reactions.png) | ![Rueda de reacciones](.github/screenshots/wheel.png) |
+| ![Emojis en el chat y en los bocadillos](.github/screenshots/bubble.png) | ![Panel de emojis](.github/screenshots/picker.png) |
+| ![Ajustes de reacciones](.github/screenshots/options-reactions.png) | ![Ajustes del chat](.github/screenshots/options-general.png) |
+
 ## Funciones
 
 - **Todos los emojis** (1.900 más sus tonos de piel) en el chat y en los bocadillos de /decir, /gritar y grupo, escritos como `:joy:` (códigos de Discord/Slack) o pegados.
 - **Panel de emojis como el de WhatsApp** desde un botón en la caja de chat: buscador en tu idioma, categorías, recientes y tonos de piel (clic derecho en un emoji).
 - **Reacciones con imágenes propias**, distintas de los emojis del chat.
 - También convierte los emoticonos clásicos (`:)`, `:D`, `<3`...) sin tocar enlaces ni URLs.
-- Rueda de reacciones igual que la **Ping Wheel** del propio juego: mantén **la tecla que tú elijas** (tecla, combinación o botón del ratón), apunta con el ratón hacia una reacción y suelta; soltando en la X del centro se cancela. Páginas de 4 reacciones (una por cada 4 imágenes de reacción) que cambias con la rueda del ratón, todas elegidas por ti.
+- Rueda de reacciones igual que la **Ping Wheel** del propio juego: mantén **la tecla que tú elijas** (tecla, combinación o botón del ratón), apunta con el ratón hacia una reacción y suelta; soltando en la X del centro se cancela. Páginas de 4 reacciones (una por cada 4 imágenes de reacción) que cambias con la rueda del ratón o con la tecla que elijas, todas elegidas por ti.
 - Los ajustes están en el panel del propio juego, **Opciones → AddOns**: tamaños, qué convertir, la tecla de la rueda, sus reacciones y la altura de tu propia reacción.
 - Ligero, sin librerías.
 
 ## Instalación
 
-1. Descarga el zip de la [última release](https://github.com/Pirson-s-Addons/EmojiReact/releases/latest).
+1. Descarga el zip de [CurseForge](https://www.curseforge.com/wow/addons/emoji-react) o de la [última release](https://github.com/Pirson-s-Addons/EmojiReact/releases/latest).
 2. Extrae la carpeta `EmojiReact` en `World of Warcraft/_classic_beta_/Interface/AddOns/`.
 3. Reinicia el juego y activa el addon.
 
