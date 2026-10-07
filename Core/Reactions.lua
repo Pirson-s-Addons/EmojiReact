@@ -17,8 +17,9 @@ local L = ns.L
 --
 -- Donde se pinta: sobre la placa de nombre (nameplate) del que reacciona. Por
 -- eso, si el jugador no tiene las placas amistosas puestas, el addon las
--- enciende solo mientras dura la reaccion (ver PLACAS AL REACCIONAR), y por eso
--- no se ve en mazmorras y bandas: ahi Blizzard prohibe a los addons tocar las placas.
+-- enciende solo mientras dura la reaccion (ver PLACAS AL REACCIONAR). En mazmorras
+-- y bandas Blizzard prohibe a los addons tocar las placas: ahi la reaccion de un
+-- companero sale junto a su marco de grupo (ver ShowOnGroupFrame).
 -- Tu propio personaje no tiene placa: tu reaccion va encima del centro de la
 -- pantalla, a la altura que elijas.
 --
@@ -34,6 +35,7 @@ local BINDING = "EMOJIREACT_WHEEL"
 local PAGE_BINDING = "EMOJIREACT_PAGE"
 local CanAccess = canaccessvalue or function() return true end
 local lastSent = 0
+local warnedLockdown = false
 
 BINDING_HEADER_EMOJIREACT = "Emoji & React"
 BINDING_NAME_EMOJIREACT_WHEEL = L.BINDING_WHEEL
@@ -44,29 +46,51 @@ BINDING_NAME_EMOJIREACT_PAGE = L.BINDING_PAGE
 -- PINTAR LA REACCION
 -- ==========================================
 
-local function Pop(anchor, code, point, relPoint, x, y)
-    local p = anchor.emojiReactPop
+-- owner: el marco que guarda la reaccion (por defecto el ancla). Los marcos de
+-- grupo de Blizzard son seguros: no se les escribe nada, se usa un marco propio.
+local function Pop(anchor, code, point, relPoint, x, y, owner)
+    owner = owner or anchor
+    local p = owner.emojiReactPop
     if not p then
-        p = CreateFrame("Frame", nil, anchor)
+        p = CreateFrame("Frame", nil, owner)
         p:SetFrameStrata("HIGH")
         p.tex = p:CreateTexture(nil, "ARTWORK")
         p.tex:SetAllPoints()
+        -- Como los emojis de Fortnite: sale pequena subiendo y crece de mas,
+        -- rebota a su tamano, se balancea, espera y se agranda mientras se va.
+        -- Cada paso (SetOrder) empieza al acabar el anterior y su efecto se
+        -- queda: las escalas se multiplican (1,25 x 0,8 = 1).
         p.anim = p:CreateAnimationGroup()
-        local grow = p.anim:CreateAnimation("Scale")
-        grow:SetScaleFrom(0.3, 0.3)
-        grow:SetScaleTo(1, 1)
-        grow:SetDuration(0.18)
-        grow:SetSmoothing("OUT")
-        local rise = p.anim:CreateAnimation("Translation")
-        rise:SetOffset(0, 14)
-        rise:SetDuration(3)
-        local fade = p.anim:CreateAnimation("Alpha")
+        local function Step(kind, order, duration, smoothing)
+            local a = p.anim:CreateAnimation(kind)
+            a:SetOrder(order)
+            a:SetDuration(duration)
+            if smoothing then a:SetSmoothing(smoothing) end
+            return a
+        end
+        local grow = Step("Scale", 1, 0.2, "OUT")
+        grow:SetScaleFrom(0.2, 0.2)
+        grow:SetScaleTo(1.25, 1.25)
+        Step("Translation", 1, 0.2, "OUT"):SetOffset(0, 16)
+        local appear = Step("Alpha", 1, 0.1)
+        appear:SetFromAlpha(0)
+        appear:SetToAlpha(1)
+        local settle = Step("Scale", 2, 0.12, "IN_OUT")
+        settle:SetScaleFrom(1, 1)
+        settle:SetScaleTo(0.8, 0.8)
+        for i, degrees in ipairs({ 8, -16, 8 }) do
+            Step("Rotation", 2 + i, math.abs(degrees) / 70, "IN_OUT"):SetDegrees(degrees)
+        end
+        local burst = Step("Scale", 6, 0.25, "IN")
+        burst:SetScaleFrom(1, 1)
+        burst:SetScaleTo(1.6, 1.6)
+        burst:SetStartDelay(1.4)
+        local fade = Step("Alpha", 6, 0.25, "IN")
         fade:SetFromAlpha(1)
         fade:SetToAlpha(0)
-        fade:SetStartDelay(2.5)
-        fade:SetDuration(0.5)
+        fade:SetStartDelay(1.4)
         p.anim:SetScript("OnFinished", function() p:Hide() end)
-        anchor.emojiReactPop = p
+        owner.emojiReactPop = p
     end
     p:SetSize(ns.db.reactionSize, ns.db.reactionSize)
     p:ClearAllPoints()
@@ -109,6 +133,46 @@ local function ShowOnPlayer(guid, code)
     return false
 end
 
+-- Dentro de instancias Blizzard prohibe tocar las placas: la reaccion de un
+-- companero sale a la derecha de su marco de grupo (el de Blizzard o el compacto).
+local groupOwners = {} -- marco de grupo -> marco propio que guarda su reaccion
+
+local function IsUnitFrameOf(frame, guid)
+    local unit = frame and frame:IsVisible() and frame.unit
+    if not unit or not CanAccess(unit) then return false end
+    local unitGUID = UnitGUID(unit)
+    return CanAccess(unitGUID) and unitGUID == guid
+end
+
+local function FindGroupFrame(guid)
+    for i = 1, 5 do
+        local f = _G["CompactPartyFrameMember" .. i]
+        if IsUnitFrameOf(f, guid) then return f end
+    end
+    for i = 1, 40 do
+        local f = _G["CompactRaidFrame" .. i]
+        if IsUnitFrameOf(f, guid) then return f end
+    end
+    for g = 1, 8 do
+        for i = 1, 5 do
+            local f = _G["CompactRaidGroup" .. g .. "Member" .. i]
+            if IsUnitFrameOf(f, guid) then return f end
+        end
+    end
+    for i = 1, 4 do
+        local f = PartyFrame and PartyFrame["MemberFrame" .. i]
+        if IsUnitFrameOf(f, guid) then return f end
+    end
+end
+
+local function ShowOnGroupFrame(guid, code)
+    local frame = FindGroupFrame(guid)
+    if not frame then return false end
+    groupOwners[frame] = groupOwners[frame] or CreateFrame("Frame", nil, UIParent)
+    Pop(frame, code, "LEFT", "RIGHT", 4, 0, groupOwners[frame])
+    return true
+end
+
 function ns.ShowOnSelf(code)
     Pop(UIParent, code or ns.db.slots[1], "CENTER", "CENTER", 0, ns.db.selfHeight)
 end
@@ -129,7 +193,15 @@ function ns.React(code)
     ns.ShowOnSelf(code)
     local msg = "R:" .. code .. ":" .. UnitGUID("player")
     local group = GroupChannel()
-    if group then C_ChatInfo.SendAddonMessage(PREFIX, msg, group) end
+    if group then
+        local result = C_ChatInfo.SendAddonMessage(PREFIX, msg, group)
+        -- Si Blizzard bloquea los mensajes de addon aqui, que el jugador lo sepa
+        local lockdown = Enum.SendAddonMessageResult and Enum.SendAddonMessageResult.AddOnMessageLockdown
+        if lockdown and result == lockdown and not warnedLockdown then
+            warnedLockdown = true
+            print(L.CHAT_PREFIX .. L.REACTION_LOCKDOWN)
+        end
+    end
     -- Jugadores cercanos con placa que no reciben por el grupo
     local whispers = 0
     for i = 1, 40 do
@@ -154,7 +226,9 @@ local function Receive(text)
     if not code or guid == UnitGUID("player") or not ns.REACTION_VALID[code] then return end
     if seen[guid] and GetTime() - seen[guid] < 1 then return end
     seen[guid] = GetTime()
-    if not ShowOnPlayer(guid, code) then ns.ShowWithTempPlates(guid, code) end
+    if ShowOnPlayer(guid, code) then return end
+    -- En instancias no hay placas: en el marco de grupo. Fuera, placas temporales
+    if IsInInstance() then ShowOnGroupFrame(guid, code) else ns.ShowWithTempPlates(guid, code) end
 end
 
 -- ==========================================
@@ -388,6 +462,7 @@ function ns.InitReactions()
         if event == "PLAYER_ENTERING_WORLD" then
             if GetChannelName(OLD_CHANNEL) > 0 then LeaveChannelByName(OLD_CHANNEL) end
             RestoreOldVersion()
+            warnedLockdown = false
             if ns.db.reactions and not GetBindingKey(BINDING) and not hinted then
                 hinted = true
                 print(L.CHAT_PREFIX .. L.KEY_HINT)

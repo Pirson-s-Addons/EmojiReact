@@ -19,9 +19,12 @@ ns.REACTION = ns.IMG .. "reaction\\"
 -- Reacciones: nombre de cada imagen de img/reaction/<nombre>.tga, en el orden de
 -- la cuadricula con la que se eligen en Opciones. Para anadir una: poner la
 -- imagen (128x128, ver tools/png_to_reaction.py) y su nombre en esta lista.
--- La rueda tiene tantas paginas de 4 como hagan falta para todas (maximo 6).
+-- Las de texto (gg, wp...) salen de _project/tools/emojireact_text_reactions.py.
+-- Cada una necesita su etiqueta L["REACTION_<nombre>"] en los 20 idiomas.
+-- La rueda tiene por defecto tantas paginas de 4 como hagan falta para todas.
 ns.REACTIONS = {
     "joy", "heart_eyes", "thumbsup", "heart", "clap", "cry", "angry", "fire",
+    "gg", "wp", "ez", "1v1", "rip", "lol",
 }
 ns.REACTION_VALID = {}
 for _, name in ipairs(ns.REACTIONS) do ns.REACTION_VALID[name] = true end

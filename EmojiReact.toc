@@ -1,5 +1,5 @@
 ## Interface: 16001
-## Version: 1.00
+## Version: 1.01
 ## Author: Pirson
 ## IconTexture: Interface\AddOns\EmojiReact\img\logo_er
 ## Title: |cffd597ffEmoji & React|r

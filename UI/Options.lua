@@ -193,7 +193,7 @@ end
 local WHEEL, SLOT, RADIUS = 210, 52, 70
 -- Orden de la rueda del juego: 1 arriba, 2 izquierda, 3 abajo, 4 derecha
 local SLOT_OFFSETS = { { 0, RADIUS }, { -RADIUS, 0 }, { 0, -RADIUS }, { RADIUS, 0 } }
-local GRID_COLS, GRID_CELL = 4, 56
+local GRID_COLS, GRID_CELL = 5, 48
 
 local function CreateReactions()
     local db = ns.db
