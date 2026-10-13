@@ -19,7 +19,7 @@ ns.DEFAULTS = {
     bubbleSize = 22,
     reactions = true,
     hideReactions = false, -- no mostrar las reacciones de los demas
-    reactionSize = 56,
+    reactionSize = 128,
     selfHeight = 170,
     wheelScale = 1,
     recent = {}, -- ultimos emojis escritos desde el panel (ficheros)
@@ -42,6 +42,8 @@ frame:SetScript("OnEvent", function(self, _, name)
     for key, value in pairs(ns.DEFAULTS) do
         if db[key] == nil then db[key] = type(value) == "table" and CopyTable(value) or value end
     end
+    -- El tamano por defecto era 56 y se veia pequeno: se sube si no se toco
+    if db.reactionSize == 56 then db.reactionSize = ns.DEFAULTS.reactionSize end
     -- Paginas fuera de rango, huecos que faltan o con una reaccion quitada de la
     -- lista, y huecos de mas
     if type(db.pages) ~= "number" or db.pages < 1 then db.pages = ns.PAGES end

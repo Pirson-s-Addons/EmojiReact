@@ -382,7 +382,7 @@ local function CreateReactions()
     test:SetPoint("TOPLEFT", X + 4, -498)
 
     for _, widget in ipairs({ test,
-        ui.Slider("reactionSize", L.REACTION_SIZE, L.REACTION_SIZE_TOOLTIP, -380, 24, 128, 4),
+        ui.Slider("reactionSize", L.REACTION_SIZE, L.REACTION_SIZE_TOOLTIP, -380, 24, 256, 4),
         ui.Slider("selfHeight", L.SELF_HEIGHT, L.SELF_HEIGHT_TOOLTIP, -428, 0, 500, 10),
         ui.Slider("wheelScale", L.WHEEL_SCALE, L.WHEEL_SCALE_TOOLTIP, -476, 0.6, 1.6, 0.1) }) do
         reactionWidgets[#reactionWidgets + 1] = widget
