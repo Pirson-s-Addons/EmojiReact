@@ -34,6 +34,7 @@ local WHISPER_MAX = 10 -- susurros por reaccion, por debajo del limite de mensaj
 local BINDING = "EMOJIREACT_WHEEL"
 local PAGE_BINDING = "EMOJIREACT_PAGE"
 local CanAccess = canaccessvalue or function() return true end
+local FRAME_TIME = 0.25 -- segundos por fotograma de las reacciones animadas
 local lastSent = 0
 local warnedLockdown = false
 
@@ -90,12 +91,23 @@ local function Pop(anchor, code, point, relPoint, x, y, owner)
         fade:SetToAlpha(0)
         fade:SetStartDelay(1.4)
         p.anim:SetScript("OnFinished", function() p:Hide() end)
+        -- Animadas: cambia de fotograma mientras se ve (OnUpdate solo corre si se ve)
+        p:SetScript("OnUpdate", function(self, elapsed)
+            local frames = ns.REACTION_FRAMES[self.code]
+            if not frames then return end
+            self.elapsed = self.elapsed + elapsed
+            if self.elapsed < FRAME_TIME then return end
+            self.elapsed = self.elapsed - FRAME_TIME
+            self.frame = self.frame % frames + 1
+            self.tex:SetTexture(ns.REACTION .. self.code .. (self.frame > 1 and "_" .. self.frame or ""))
+        end)
         owner.emojiReactPop = p
     end
     p:SetSize(ns.db.reactionSize, ns.db.reactionSize)
     p:ClearAllPoints()
     p:SetPoint(point, anchor, relPoint, x, y)
     p.tex:SetTexture(ns.REACTION .. code)
+    p.code, p.frame, p.elapsed = code, 1, 0
     p:Show()
     p.anim:Stop()
     p.anim:Play()
