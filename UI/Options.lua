@@ -130,6 +130,7 @@ local function NewPanel(titleText)
             ui.Refresh()
         end)
         reset:SetPoint("TOPLEFT", X, y)
+        return reset
     end
 
     local title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -193,7 +194,8 @@ end
 local WHEEL, SLOT, RADIUS = 210, 52, 70
 -- Orden de la rueda del juego: 1 arriba, 2 izquierda, 3 abajo, 4 derecha
 local SLOT_OFFSETS = { { 0, RADIUS }, { -RADIUS, 0 }, { 0, -RADIUS }, { RADIUS, 0 } }
-local GRID_COLS, GRID_CELL = 6, 40
+-- Cuadricula en una caja de 3 filas: las celdas encogen si no caben (hasta GRID_MIN)
+local GRID_ROWS, GRID_CELL, GRID_MIN, GRID_PAD = 3, 52, 36, 8
 
 local function CreateReactions()
     local db = ns.db
@@ -215,7 +217,7 @@ local function CreateReactions()
     -- Vista previa de la rueda
     local wheel = CreateFrame("Frame", nil, panel)
     wheel:SetSize(WHEEL, WHEEL)
-    wheel:SetPoint("TOPLEFT", X + 6, -76)
+    wheel:SetPoint("TOPLEFT", X + 6, -80)
     local bg = wheel:CreateTexture(nil, "BACKGROUND")
     bg:SetAtlas("Radial_Wheel_BG")
     bg:SetAllPoints()
@@ -274,11 +276,40 @@ local function CreateReactions()
         reactionWidgets[#reactionWidgets + 1] = slot
     end
 
+    local grid = CreateFrame("Frame", nil, panel, "BackdropTemplate")
+    grid:SetPoint("TOPLEFT", selectedText, "BOTTOMLEFT", 0, -8)
+    grid:SetPoint("RIGHT", panel, "RIGHT", -RIGHT, 0)
+    grid:SetBackdrop({
+        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+        edgeSize = 12, insets = { left = 3, right = 3, top = 3, bottom = 3 },
+    })
+    grid:SetBackdropColor(0, 0, 0, 0.5)
+    grid:SetBackdropBorderColor(0.6, 0.6, 0.6, 0.8)
+
+    -- Columnas segun el ancho; si no caben en GRID_ROWS filas, celdas mas pequenas
+    local function LayoutGrid()
+        local width = grid:GetWidth() - 2 * GRID_PAD
+        if width <= 0 then return end
+        local cols = math.ceil(#cells / GRID_ROWS)
+        local size = math.max(GRID_MIN, math.min(GRID_CELL, math.floor(width / cols)))
+        cols = math.max(1, math.floor(width / size))
+        for i, cell in ipairs(cells) do
+            cell:SetSize(size - 4, size - 4)
+            cell.mark:SetSize(size * 1.7, size * 1.7)
+            cell:ClearAllPoints()
+            cell:SetPoint("TOPLEFT", grid, "TOPLEFT",
+                GRID_PAD + 2 + (i - 1) % cols * size, -GRID_PAD - 2 - math.floor((i - 1) / cols) * size)
+        end
+        grid:SetHeight(math.ceil(#cells / cols) * size + 2 * GRID_PAD)
+    end
+    grid:SetScript("OnSizeChanged", LayoutGrid)
+
     for i, code in ipairs(ns.REACTIONS) do
-        local cell = CreateFrame("Button", nil, panel)
-        cell:SetSize(GRID_CELL - 6, GRID_CELL - 6)
-        cell:SetPoint("TOPLEFT", selectedText, "BOTTOMLEFT",
-            (i - 1) % GRID_COLS * GRID_CELL, -10 - math.floor((i - 1) / GRID_COLS) * GRID_CELL)
+        local cell = CreateFrame("Button", nil, grid)
+        local back = cell:CreateTexture(nil, "BACKGROUND")
+        back:SetColorTexture(1, 1, 1, 0.06)
+        back:SetAllPoints()
         cell:SetNormalTexture(ns.REACTION .. code)
         cell:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
         NewMark(cell, GRID_CELL * 1.7)
@@ -296,10 +327,12 @@ local function CreateReactions()
         cells[i] = cell
         reactionWidgets[#reactionWidgets + 1] = cell
     end
+    LayoutGrid()
 
     -- Paginas: una pestana por pagina, "+" anade una al final, "-" quita la actual
     local pagesLabel = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-    pagesLabel:SetPoint("TOPLEFT", wheel, "BOTTOMLEFT", -2, -12)
+    -- Debajo de la rueda y de la cuadricula: con muchas paginas las pestanas pasan bajo ella
+    pagesLabel:SetPoint("TOPLEFT", X + 4, -328)
     pagesLabel:SetText(L.SLOTS)
 
     for p = 1, ns.MAX_PAGES do
@@ -348,12 +381,14 @@ local function CreateReactions()
     ui.OnRefresh = Refresh
 
     -- Opciones
-    ui.Separator(-332)
-    ui.Header(-346, L.OPTIONS_HEADER)
-    ui.Checkbox("reactions", L.REACTIONS, L.REACTIONS_TOOLTIP, -368, function() Refresh() end)
+    ui.Separator(-358)
+    ui.Header(-370, L.OPTIONS_HEADER)
+    ui.Checkbox("reactions", L.REACTIONS, L.REACTIONS_TOOLTIP, -390, function() Refresh() end)
     -- Las de los demas; las tuyas se siguen enviando
     reactionWidgets[#reactionWidgets + 1] =
-        ui.Checkbox("hideReactions", L.HIDE_REACTIONS, L.HIDE_REACTIONS_TOOLTIP, -394)
+        ui.Checkbox("hideReactions", L.HIDE_REACTIONS, L.HIDE_REACTIONS_TOOLTIP, -416)
+    reactionWidgets[#reactionWidgets + 1] =
+        ui.Checkbox("reactionEmote", L.REACTION_EMOTE, L.REACTION_EMOTE_TOOLTIP, -442)
 
     -- Fila "etiqueta + tecla + Borrar" de un atajo (which: "wheel" o "page")
     local function KeyRow(y, label, tooltip, which)
@@ -376,22 +411,23 @@ local function CreateReactions()
         reactionWidgets[#reactionWidgets + 1] = button
         reactionWidgets[#reactionWidgets + 1] = clear
     end
-    KeyRow(-436, L.KEY, L.KEY_TOOLTIP, "wheel")
-    KeyRow(-466, L.PAGE_KEY, L.PAGE_KEY_TOOLTIP, "page")
+    KeyRow(-478, L.KEY, L.KEY_TOOLTIP, "wheel")
+    KeyRow(-508, L.PAGE_KEY, L.PAGE_KEY_TOOLTIP, "page")
     local test = ui.Button(L.TEST, 120, L.TEST_TOOLTIP, function() ns.ShowOnSelf(db.slots[Index()]) end)
-    test:SetPoint("TOPLEFT", X + 4, -498)
 
     for _, widget in ipairs({ test,
-        ui.Slider("reactionSize", L.REACTION_SIZE, L.REACTION_SIZE_TOOLTIP, -380, 24, 256, 4),
-        ui.Slider("selfHeight", L.SELF_HEIGHT, L.SELF_HEIGHT_TOOLTIP, -428, 0, 500, 10),
-        ui.Slider("wheelScale", L.WHEEL_SCALE, L.WHEEL_SCALE_TOOLTIP, -476, 0.6, 1.6, 0.1) }) do
+        ui.Slider("reactionSize", L.REACTION_SIZE, L.REACTION_SIZE_TOOLTIP, -402, 24, 256, 4),
+        ui.Slider("selfHeight", L.SELF_HEIGHT, L.SELF_HEIGHT_TOOLTIP, -448, 0, 500, 10),
+        ui.Slider("wheelScale", L.WHEEL_SCALE, L.WHEEL_SCALE_TOOLTIP, -494, 0.6, 1.6, 0.1) }) do
         reactionWidgets[#reactionWidgets + 1] = widget
     end
 
     -- Las teclas no se tocan: son atajos del juego y se quitan con "Borrar"
-    ui.Separator(-534)
-    ui.ResetButton({ "reactions", "hideReactions", "reactionSize", "selfHeight", "wheelScale", "slots", "pages", "page" },
-        -548, function() page, selected = 1, 1 end)
+    ui.Separator(-542)
+    local reset = ui.ResetButton({ "reactions", "hideReactions", "reactionEmote", "reactionSize", "selfHeight", "wheelScale", "slots", "pages", "page" },
+        -554, function() page, selected = 1, 1 end)
+    -- "Probar" junto a "Valores por defecto", para que todo quepa en el alto del panel
+    test:SetPoint("LEFT", reset, "RIGHT", 10, 0)
     return ui.panel
 end
 

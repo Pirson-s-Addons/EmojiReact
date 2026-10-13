@@ -203,6 +203,9 @@ function ns.React(code)
     if not ns.db.reactions or not ns.REACTION_VALID[code] or GetTime() - lastSent < 1.5 then return end
     lastSent = GetTime()
     ns.ShowOnSelf(code)
+    if ns.db.reactionEmote and ns.REACTION_EMOTE[code] then
+        C_ChatInfo.PerformEmote(ns.REACTION_EMOTE[code])
+    end
     local msg = "R:" .. code .. ":" .. UnitGUID("player")
     local group = GroupChannel()
     if group then

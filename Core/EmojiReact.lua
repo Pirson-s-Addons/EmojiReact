@@ -19,6 +19,7 @@ ns.DEFAULTS = {
     bubbleSize = 22,
     reactions = true,
     hideReactions = false, -- no mostrar las reacciones de los demas
+    reactionEmote = false, -- hacer tambien el emote del juego (/aplaudir...)
     reactionSize = 128,
     selfHeight = 170,
     wheelScale = 1,
