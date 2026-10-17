@@ -26,16 +26,18 @@ ns.REACTIONS = {
     "joy", "heart_eyes", "thumbsup", "heart", "clap", "cry", "angry", "fire",
     "gg", "wp", "ez", "1v1", "rip", "lol",
     "laugh", "clap2", "cry2", "angry2", "fire2", "celebrate", "cheerup",
+    "hi", "kiss", "disrespect",
 }
 -- Animadas: numero de fotogramas. El 1 es <nombre>.tga (el que sale en la rueda
 -- y en Opciones) y los demas <nombre>_2.tga, <nombre>_3.tga...
-ns.REACTION_FRAMES = { laugh = 2, clap2 = 2, cry2 = 2, angry2 = 2, fire2 = 2, celebrate = 2, cheerup = 4 }
+ns.REACTION_FRAMES = { laugh = 2, clap2 = 2, cry2 = 2, angry2 = 2, fire2 = 2, celebrate = 2, cheerup = 4, hi = 2, kiss = 2, disrespect = 2 }
 -- Emote del juego que acompana a cada reaccion (EmotesText de Forever, wago.tools)
 ns.REACTION_EMOTE = {
     joy = "LAUGH", heart_eyes = "KISS", thumbsup = "CONGRATULATE", heart = "LOVE", clap = "CLAP",
     cry = "CRY", angry = "ANGRY", fire = "ROAR", gg = "BOW", wp = "COMMEND", ez = "FLEX",
     ["1v1"] = "TAUNT", rip = "MOURN", lol = "ROFL", laugh = "LAUGH", clap2 = "CLAP", cry2 = "CRY",
     angry2 = "ANGRY", fire2 = "ROAR", celebrate = "VICTORY", cheerup = "CHEER",
+    hi = "WAVE", kiss = "KISS", disrespect = "RUDE",
 }
 ns.REACTION_VALID = {}
 for _, name in ipairs(ns.REACTIONS) do ns.REACTION_VALID[name] = true end
