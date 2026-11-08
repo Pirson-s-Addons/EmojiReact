@@ -431,6 +431,68 @@ local function CreateReactions()
     return ui.panel
 end
 
+-- ==========================================
+-- AUTOMATICAS
+-- ==========================================
+-- Una fila por suceso de ns.AUTO: casilla + desplegable con la reaccion.
+
+local function CreateAuto()
+    local db = ns.db
+    local ui = NewPanel(L.OPTIONS_TITLE)
+    local panel = ui.panel
+    ui.Header(-60, L.AUTO_HEADER)
+    local desc = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+    desc:SetPoint("TOPLEFT", X, -80)
+    desc:SetPoint("RIGHT", ui.logo, "LEFT", -20, 0)
+    desc:SetJustifyH("LEFT")
+    desc:SetText(L.AUTO_DESC)
+
+    local keys = {}
+    for i, auto in ipairs(ns.AUTO) do
+        local key, codeKey = "auto" .. auto.key, "auto" .. auto.key .. "Code"
+        keys[#keys + 1] = key
+        keys[#keys + 1] = codeKey
+        local y = -140 - (i - 1) * 40
+        local dropdown = CreateFrame("Frame", "EmojiReact_" .. codeKey, panel, "UIDropDownMenuTemplate")
+        local function Update()
+            local on = db.reactions and db[key]
+            UIDropDownMenu_SetText(dropdown, ns.ReactionName(db[codeKey]))
+            if on then UIDropDownMenu_EnableDropDown(dropdown) else UIDropDownMenu_DisableDropDown(dropdown) end
+            dropdown:SetAlpha(on and 1 or 0.5)
+        end
+        local cb = ui.Checkbox(key, L["AUTO_" .. auto.key:upper()], L.AUTO_TOOLTIP, y, Update)
+        cb:SetEnabled(db.reactions)
+        dropdown:SetPoint("TOPRIGHT", -RIGHT + 16, y + 2)
+        UIDropDownMenu_SetWidth(dropdown, 160)
+        AddTooltip(dropdown, L.AUTO_PICK_TOOLTIP)
+        UIDropDownMenu_Initialize(dropdown, function()
+            for _, code in ipairs(ns.REACTIONS) do
+                local info = UIDropDownMenu_CreateInfo()
+                info.text = ns.ReactionName(code)
+                info.icon = ns.REACTION .. code
+                info.checked = db[codeKey] == code
+                info.func = function()
+                    db[codeKey] = code
+                    Update()
+                    ns.ShowOnSelf(code) -- vista previa, solo la ves tu
+                end
+                UIDropDownMenu_AddButton(info)
+            end
+        end)
+        dropdown.Refresh = function()
+            cb:SetEnabled(db.reactions)
+            cb:SetAlpha(db.reactions and 1 or 0.5)
+            Update()
+        end
+        ui.widgets[#ui.widgets + 1] = dropdown
+    end
+
+    local bottom = -140 - #ns.AUTO * 40
+    ui.Separator(bottom)
+    ui.ResetButton(keys, bottom - 12)
+    return panel
+end
+
 function ns.CreateOptions()
     ns.LOGO = ns.IMG .. "logo_er"
     local root = ns.CreateAbout({
@@ -448,6 +510,7 @@ function ns.CreateOptions()
     })
     local general = Settings.RegisterCanvasLayoutSubcategory(root, CreateGeneral(), L.GENERAL)
     local reactions = Settings.RegisterCanvasLayoutSubcategory(root, CreateReactions(), L.REACTIONS_TAB)
+    Settings.RegisterCanvasLayoutSubcategory(root, CreateAuto(), L.AUTO_TAB)
 
     SLASH_EMOJIREACT1 = "/emoji"
     SlashCmdList.EMOJIREACT = function(input)

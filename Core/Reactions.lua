@@ -233,6 +233,48 @@ function ns.React(code)
     end
 end
 
+-- ==========================================
+-- REACCIONES AUTOMATICAS
+-- ==========================================
+-- Duelo ganado o perdido, subir de nivel, logro y muerte (ns.AUTO).
+
+local function AutoReact(key)
+    if ns.db["auto" .. key] then ns.React(ns.db["auto" .. key .. "Code"]) end
+end
+
+-- Mensaje de sistema del duelo ("%1$s has defeated %2$s in a duel") -> patron
+-- que devuelve ganador y perdedor, respetando el orden de cada idioma
+local function DuelMatcher(fmt)
+    if type(fmt) ~= "string" then return function() end end
+    local order = {}
+    local pat = fmt:gsub("%%(%d)%$s", function(i) order[#order + 1] = tonumber(i); return "\1" end)
+    pat = pat:gsub("%%s", function() order[#order + 1] = #order + 1; return "\1" end)
+    pat = "^" .. pat:gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0"):gsub("\1", "(.+)") .. "$"
+    return function(msg)
+        local caps, args = { msg:match(pat) }, {}
+        for k, i in ipairs(order) do args[i] = caps[k] end
+        return args[1], args[2]
+    end
+end
+local duelMatchers
+
+-- Los nombres de Forever llevan apellido: UnitName da solo el nombre
+local function IsMe(name)
+    name = name and name:gsub("%-.*", "")
+    return name and (name == UnitName("player") or name == GetUnitName("player", false))
+end
+
+function ns.OnDuelMessage(msg)
+    if not CanAccess(msg) then return end
+    -- En ambos el %1 es el ganador: "%1$s ha derrotado a %2$s" y "%2$s ha huido de %1$s"
+    duelMatchers = duelMatchers or { DuelMatcher(DUEL_WINNER_KNOCKOUT), DuelMatcher(DUEL_WINNER_RETREAT) }
+    for _, match in ipairs(duelMatchers) do
+        local winner, loser = match(msg)
+        if winner and IsMe(winner) then return AutoReact("DuelWon") end
+        if loser and IsMe(loser) then return AutoReact("DuelLost") end
+    end
+end
+
 local seen = {} -- GUID -> momento de su ultima reaccion (copias repetidas)
 
 local function Receive(text)
@@ -473,8 +515,20 @@ function ns.InitReactions()
     frame:RegisterEvent("NAME_PLATE_UNIT_ADDED")
     frame:RegisterEvent("PLAYER_REGEN_ENABLED")
     frame:RegisterEvent("PLAYER_LOGOUT")
+    frame:RegisterEvent("CHAT_MSG_SYSTEM")
+    frame:RegisterEvent("PLAYER_LEVEL_UP")
+    frame:RegisterEvent("ACHIEVEMENT_EARNED")
+    frame:RegisterEvent("PLAYER_DEAD")
     frame:SetScript("OnEvent", function(_, event, ...)
-        if event == "PLAYER_ENTERING_WORLD" then
+        if event == "CHAT_MSG_SYSTEM" then
+            ns.OnDuelMessage(...)
+        elseif event == "PLAYER_LEVEL_UP" then
+            AutoReact("Level")
+        elseif event == "ACHIEVEMENT_EARNED" then
+            AutoReact("Achievement")
+        elseif event == "PLAYER_DEAD" then
+            AutoReact("Death")
+        elseif event == "PLAYER_ENTERING_WORLD" then
             if GetChannelName(OLD_CHANNEL) > 0 then LeaveChannelByName(OLD_CHANNEL) end
             RestoreOldVersion()
             warnedLockdown = false

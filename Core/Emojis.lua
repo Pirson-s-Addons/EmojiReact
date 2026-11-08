@@ -42,6 +42,16 @@ ns.REACTION_EMOTE = {
 ns.REACTION_VALID = {}
 for _, name in ipairs(ns.REACTIONS) do ns.REACTION_VALID[name] = true end
 
+-- Reacciones automaticas: cada suceso tiene su casilla (db.auto<key>) y su
+-- reaccion (db.auto<key>Code); code es la de por defecto
+ns.AUTO = {
+    { key = "DuelWon", code = "gg" },
+    { key = "DuelLost", code = "rip" },
+    { key = "Level", code = "fire" },
+    { key = "Achievement", code = "celebrate" },
+    { key = "Death", code = "rip" },
+}
+
 -- Emoticonos clasicos -> fichero. Solo se cambian si van entre espacios, para
 -- no tocar enlaces ni URLs ("https://", "|Hitem:...").
 local EMOTICONS = {

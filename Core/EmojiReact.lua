@@ -20,7 +20,7 @@ ns.DEFAULTS = {
     reactions = true,
     hideReactions = false, -- no mostrar las reacciones de los demas
     reactionEmote = false, -- hacer tambien el emote del juego (/aplaudir...)
-    reactionSize = 128,
+    reactionSize = 80,
     selfHeight = 170,
     wheelScale = 1,
     recent = {}, -- ultimos emojis escritos desde el panel (ficheros)
@@ -33,6 +33,10 @@ ns.DEFAULTS = {
 ns.DEFAULTS.pages = ns.PAGES
 ns.DEFAULTS.slots = {}
 for i = 1, ns.PAGES * ns.SLOTS do ns.DEFAULTS.slots[i] = ns.DefaultSlot(i) end
+for _, auto in ipairs(ns.AUTO) do
+    ns.DEFAULTS["auto" .. auto.key] = true
+    ns.DEFAULTS["auto" .. auto.key .. "Code"] = auto.code
+end
 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
@@ -43,8 +47,8 @@ frame:SetScript("OnEvent", function(self, _, name)
     for key, value in pairs(ns.DEFAULTS) do
         if db[key] == nil then db[key] = type(value) == "table" and CopyTable(value) or value end
     end
-    -- El tamano por defecto era 56 y se veia pequeno: se sube si no se toco
-    if db.reactionSize == 56 then db.reactionSize = ns.DEFAULTS.reactionSize end
+    -- El tamano por defecto fue 56 (pequeno) y luego 128 (tapaba los nombres): si no se toco, al actual
+    if db.reactionSize == 56 or db.reactionSize == 128 then db.reactionSize = ns.DEFAULTS.reactionSize end
     -- Paginas fuera de rango, huecos que faltan o con una reaccion quitada de la
     -- lista, y huecos de mas
     if type(db.pages) ~= "number" or db.pages < 1 then db.pages = ns.PAGES end
@@ -54,6 +58,10 @@ frame:SetScript("OnEvent", function(self, _, name)
     end
     for i = #db.slots, db.pages * ns.SLOTS + 1, -1 do db.slots[i] = nil end
     if db.page > db.pages then db.page = 1 end
+    for _, auto in ipairs(ns.AUTO) do
+        local key = "auto" .. auto.key .. "Code"
+        if not ns.REACTION_VALID[db[key]] then db[key] = auto.code end
+    end
     ns.db = db
 
     ns.InitChat()
