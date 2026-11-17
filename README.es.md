@@ -64,7 +64,7 @@
 ## Instalación
 
 1. Descarga el zip de [CurseForge](https://www.curseforge.com/wow/addons/emoji-react) o de la [última release](https://github.com/Pirson-s-Addons/EmojiReact/releases/latest).
-2. Extrae la carpeta `EmojiReact` en `World of Warcraft/_classic_beta_/Interface/AddOns/`.
+2. Extrae la carpeta `EmojiReact` en `World of Warcraft/_forever_/Interface/AddOns/`.
 3. Reinicia el juego y activa el addon.
 
 ## Notas
