@@ -84,19 +84,56 @@ function EmojiReact_NextPage()
     if wheel:IsShown() and not wheel.isWheelClosing then Turn(-1) end
 end
 
--- Lo llama el atajo de Bindings.xml: pulsar abre en el raton, soltar elige
+-- ------------------------------------------
+-- Mando
+-- ------------------------------------------
+-- Con la interfaz de mando, la plantilla mueve la seleccion con el stick derecho y,
+-- al soltarlo, llama a EndGamepadStickSelection (solo la define la rueda de avisos).
+-- Antes de abrir la rueda no hay porciones: el stick (tambien el giroscopio, "Gyro")
+-- no se atiende, o la plantilla divide por un intervalo que aun no existe.
+local function GamepadUI()
+    return InputUtil and InputUtil.IsGamepadUIEnabled and InputUtil.IsGamepadUIEnabled() or false
+end
+
+local function Choose(self)
+    if not self:IsShown() or self.isWheelClosing then return end
+    local selected = self:SelectionEnd() -- nil en la "X" del centro (boton B)
+    self:AnimateOutro()
+    if selected then ns.React(selected.type) end
+end
+wheel.EndGamepadStickSelection = Choose
+
+wheel:SetScript("OnGamePadStick", function(self, stick, x, y)
+    if stick == "Gyro" or not self.wedgeAngleIntervalRadiansHalf or not self:IsShown() then return end
+    self:ProcessGamepadStickInput(stick, x, y)
+end)
+if wheel.EnableGamePadStick then
+    wheel:EnableGamePadStick(false)
+    wheel:EnableGamePadButton(false)
+end
+wheel:HookScript("OnHide", function(self)
+    if self.EnableGamePadStick then
+        self:EnableGamePadStick(false)
+        self:EnableGamePadButton(false)
+    end
+end)
+
+-- Lo llama el atajo de Bindings.xml: pulsar abre en el raton, soltar elige. Con
+-- mando, en el centro de la pantalla (no hay raton) y se elige con el stick derecho
 function EmojiReact_Wheel(keystate)
     if not ns.db.reactions then return end
     if keystate == "down" then
-        local x, y = GetCursorPosition()
-        local scale = UIParent:GetEffectiveScale()
         anchor:ClearAllPoints()
-        anchor:SetPoint("CENTER", UIParent, "BOTTOMLEFT", x / scale, y / scale)
+        if GamepadUI() then
+            anchor:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+        else
+            local x, y = GetCursorPosition()
+            local scale = UIParent:GetEffectiveScale()
+            anchor:SetPoint("CENTER", UIParent, "BOTTOMLEFT", x / scale, y / scale)
+        end
         wheel:SetScale(ns.db.wheelScale)
         Show()
-    elseif wheel:IsShown() and not wheel.isWheelClosing then
-        local selected = wheel:SelectionEnd() -- nil si se suelta en la "X" del centro
-        wheel:AnimateOutro()
-        if selected then ns.React(selected.type) end
+    else
+        Choose(wheel) -- soltar la tecla: la porcion elegida (nil en la "X" del centro)
     end
 end

@@ -1,5 +1,5 @@
 ## Interface: 16001
-## Version: 1.04
+## Version: 1.05
 ## Author: Pirson
 ## IconTexture: Interface\AddOns\EmojiReact\img\logo_er
 ## Title: |cffd597ffEmoji & React|r
@@ -96,6 +96,12 @@
 ## Notes-viVN: |cFF33CCFFEmoji trong chat và bong bóng thoại, cùng vòng cảm xúc giống vòng ping của game hiện cảm xúc trên đầu nhân vật của bạn.|r
 
 ## SavedVariables: EmojiReactDB
+## X-Curse-Project-ID: 1729936
+## X-License: MIT
+## X-Copyright: Copyright (c) 2026 Pirson
+## X-Website: https://github.com/Pirson-s-Addons/EmojiReact
+## X-Localizations: enUS, esES, esMX, deDE, frFR, itIT, ptBR, ruRU, koKR, zhCN, zhTW, plPL, svSE, noNO, trTR, jaJP, arSA, hiIN, thTH, viVN, csCZ
+## AddonCompartmentFunc: EmojiReact_OnAddonCompartmentClick
 
 # Solo WoW Forever: el sufijo _Camelot es el game type que busca ese cliente.
 # EmojiReact.toc es copia exacta de este: la app de CurseForge exige <Carpeta>.toc

@@ -484,7 +484,18 @@ local function Bind(key)
 end
 
 capture:SetScript("OnKeyDown", function(_, key) if not MODIFIERS[key] then Bind(key) end end)
-capture:SetScript("OnMouseDown", function(_, button) if MOUSE[button] then Bind(MOUSE[button]) end end)
+-- Clic izquierdo (tambien el del cursor del mando) cierra sin cambiar nada
+capture:SetScript("OnMouseDown", function(_, button)
+    if MOUSE[button] then Bind(MOUSE[button]) elseif button == "LeftButton" then capture:Hide() end
+end)
+-- Mando: el boton pulsado (PAD1, PADLSHOULDER...); B (PAD2) cancela, como en el juego
+if capture.EnableGamePadButton then
+    capture:EnableGamePadButton(true)
+    capture:SetScript("OnGamePadButtonDown", function(_, button)
+        if button == "PAD2" then return capture:Hide() end
+        Bind(button)
+    end)
+end
 
 function ns.PickKey(onDone, which)
     if InCombatLockdown() then print(L.CHAT_PREFIX .. L.KEY_COMBAT) return end
