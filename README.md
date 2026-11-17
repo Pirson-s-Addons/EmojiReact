@@ -1,24 +1,32 @@
-<h1 align="center">Emoji & React</h1>
+<p align="center"><a href="https://www.curseforge.com/wow/addons/emoji-react"><img src="https://raw.githubusercontent.com/Pirson-s-Addons/.github/main/profile/assets/readme-er-en.svg" width="100%" alt="Emoji & React"/></a></p>
+
+<p align="center"><b>English</b> · <a href="README.es.md">Español</a></p>
 
 <p align="center">
-  <b>Emojis in chat and speech bubbles, plus a reaction wheel for World of Warcraft: Forever</b>
+<a href="https://www.curseforge.com/wow/addons/emoji-react"><b>CurseForge</b></a> ·
+<a href="https://github.com/Pirson-s-Addons/EmojiReact/releases/latest"><b>Download</b></a>
 </p>
 
-<p align="center">
-<a href="https://github.com/Pirson-s-Addons/EmojiReact/releases/latest">
-<img src="https://img.shields.io/github/v/release/Pirson-s-Addons/EmojiReact?style=for-the-badge&color=A78BFA">
-</a>
-<img src="https://img.shields.io/badge/WoW_Forever-1.60.1-C4B5FD?style=for-the-badge">
-<a href="LICENSE">
-<img src="https://img.shields.io/badge/License-MIT-E9D5FF?style=for-the-badge">
-</a>
-</p>
+## Screenshots
 
-<p align="center">
-<a href="README.es.md">🇪🇸 Español</a>
-</p>
-
----
+<table>
+<tr>
+<td align="center" width="50%"><img src="https://media.forgecdn.net/attachments/2164/757/reacciones-gif.gif" alt="Reactions in motion"><br><sub>Reactions in motion</sub></td>
+<td align="center" width="50%"><img src="https://media.forgecdn.net/attachments/2024/449/screenshot_1-png.png" alt="Emoji panel"><br><sub>Emoji panel</sub></td>
+</tr>
+<tr>
+<td align="center" width="50%"><img src="https://media.forgecdn.net/attachments/2024/468/screenshot_2-jpg.jpg" alt="Emojis in chat and bubbles"><br><sub>Emojis in chat and bubbles</sub></td>
+<td align="center" width="50%"><img src="https://media.forgecdn.net/attachments/2024/467/screenshot_3-jpg.jpg" alt="Reaction wheel"><br><sub>Reaction wheel</sub></td>
+</tr>
+<tr>
+<td align="center" width="50%"><img src="https://media.forgecdn.net/attachments/2024/450/screenshot_5-png.png" alt="Reactions above players"><br><sub>Reactions above players</sub></td>
+<td align="center" width="50%"><img src="https://media.forgecdn.net/attachments/2024/466/screenshot_4-jpg.jpg" alt="Your own reaction"><br><sub>Your own reaction</sub></td>
+</tr>
+<tr>
+<td align="center" width="50%"><img src="https://media.forgecdn.net/attachments/2024/483/screenshot_7-png.png" alt="Customize the wheel"><br><sub>Customize the wheel</sub></td>
+<td align="center" width="50%"><img src="https://media.forgecdn.net/attachments/2024/484/screenshot_6-png.png" alt="Options"><br><sub>Options</sub></td>
+</tr>
+</table>
 
 ## What it does
 
@@ -46,12 +54,6 @@
 - Settings live in the game's own **Options → AddOns** panel: sizes, what to convert, the wheel key, the wheel reactions and the height of your own reaction.
 - Lightweight, no libraries.
 
-## Installation
-
-1. Download the zip from [CurseForge](https://www.curseforge.com/wow/addons/emoji-react) or the [latest release](https://github.com/Pirson-s-Addons/EmojiReact/releases/latest).
-2. Extract the `EmojiReact` folder into `World of Warcraft/_classic_beta_/Interface/AddOns/`.
-3. Restart WoW and enable the addon.
-
 ## Usage
 
 - `/emoji` opens the settings. `/emoji wheel` opens the reactions panel. `/emoji panel` opens the emoji panel (also from the button in the chat box or its key binding). `/emoji key` chooses the wheel key. `/emoji test` shows a reaction above you.
@@ -59,12 +61,18 @@
 - **Options → AddOns → Emoji & React → Reactions**: the wheel as it looks in game. Click a slot and pick its reaction, add or remove pages, and set the key, sizes and height.
 - **Other players'** reactions appear above their nameplate. If you don't use friendly nameplates, the addon turns them on only while the reaction lasts and puts them back as they were. *Hide reactions* hides other players' reactions, and then the addon never touches nameplates.
 
+## Installation
+
+1. Download the zip from [CurseForge](https://www.curseforge.com/wow/addons/emoji-react) or the [latest release](https://github.com/Pirson-s-Addons/EmojiReact/releases/latest).
+2. Extract the `EmojiReact` folder into `World of Warcraft/_classic_beta_/Interface/AddOns/`.
+3. Restart WoW and enable the addon.
+
 ## Notes
 
 - Messages are still sent as text (`:joy:`): players without the addon see the text, as with any emoji addon.
 - **Inside dungeons and raids** Blizzard does not let addons read chat or touch speech bubbles and friendly nameplates: there are no emojis in chat or bubbles, and your group's reactions show next to their party frame instead of above them.
 - Your own character has no nameplate, so your reaction is placed above the screen center. Adjust *Height above you* to your camera zoom.
 
----
+<br/>
 
-**Author**: Pirson · [GitHub](https://github.com/Pirson-s-Addons) · [CurseForge](https://www.curseforge.com/members/pirson/projects) · MIT License · Emoji graphics: [Twemoji](https://github.com/jdecked/twemoji) (CC-BY 4.0) · Emoji data: [emojibase](https://emojibase.dev) (MIT)
+<p align="center"><a href="https://github.com/Pirson-s-Addons"><img src="https://raw.githubusercontent.com/Pirson-s-Addons/.github/main/profile/assets/readme-footer-en.svg" width="100%" alt="Part of Pirson's Addons. See all addons."/></a></p>
