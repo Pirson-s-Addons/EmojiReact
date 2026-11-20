@@ -142,3 +142,12 @@ L["AUTO_ACHIEVEMENT"] = "Achievement earned"
 L["AUTO_DEATH"] = "Death"
 L["AUTO_TOOLTIP"] = "Reacts on its own when this happens. Needs reactions to be turned on."
 L["AUTO_PICK_TOOLTIP"] = "Reaction to show. Choosing one shows a preview above you."
+
+-- Navegacion con mando (UI/GamepadNav.lua)
+L["PAD_MOVE"] = "Move"
+L["PAD_SELECT"] = "Select"
+L["PAD_TOGGLE"] = "Tick"
+L["PAD_CLOSE"] = "Close"
+L["PAD_BACK"] = "Back"
+L["PAD_CLOSE_MENU"] = "Close menu"
+L["PAD_SCROLL"] = "Scroll"

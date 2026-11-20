@@ -140,3 +140,12 @@ L["AUTO_ACHIEVEMENT"] = "獲得成就"
 L["AUTO_DEATH"] = "死亡"
 L["AUTO_TOOLTIP"] = "發生此事時自動反應。需要開啟反應。"
 L["AUTO_PICK_TOOLTIP"] = "顯示的反應。選擇後會在你頭頂顯示預覽。"
+
+-- Navegacion con mando (UI/GamepadNav.lua)
+L["PAD_MOVE"] = "移動"
+L["PAD_SELECT"] = "選擇"
+L["PAD_TOGGLE"] = "勾選"
+L["PAD_CLOSE"] = "關閉"
+L["PAD_BACK"] = "返回"
+L["PAD_CLOSE_MENU"] = "關閉選單"
+L["PAD_SCROLL"] = "捲動"

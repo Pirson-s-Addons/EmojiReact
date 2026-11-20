@@ -140,3 +140,12 @@ L["AUTO_ACHIEVEMENT"] = "実績獲得"
 L["AUTO_DEATH"] = "死亡"
 L["AUTO_TOOLTIP"] = "これが起きると自動でリアクションします。リアクションをオンにする必要があります。"
 L["AUTO_PICK_TOOLTIP"] = "表示するリアクション。選ぶと頭上にプレビューが出ます。"
+
+-- Navegacion con mando (UI/GamepadNav.lua)
+L["PAD_MOVE"] = "移動"
+L["PAD_SELECT"] = "選択"
+L["PAD_TOGGLE"] = "チェック"
+L["PAD_CLOSE"] = "閉じる"
+L["PAD_BACK"] = "戻る"
+L["PAD_CLOSE_MENU"] = "メニューを閉じる"
+L["PAD_SCROLL"] = "スクロール"

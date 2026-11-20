@@ -140,3 +140,12 @@ L["AUTO_ACHIEVEMENT"] = "Đạt thành tựu"
 L["AUTO_DEATH"] = "Chết"
 L["AUTO_TOOLTIP"] = "Tự phản ứng khi chuyện này xảy ra. Cần bật phản ứng."
 L["AUTO_PICK_TOOLTIP"] = "Phản ứng hiển thị. Khi chọn, bạn sẽ thấy bản xem trước phía trên mình."
+
+-- Navegacion con mando (UI/GamepadNav.lua)
+L["PAD_MOVE"] = "Di chuyển"
+L["PAD_SELECT"] = "Chọn"
+L["PAD_TOGGLE"] = "Đánh dấu"
+L["PAD_CLOSE"] = "Đóng"
+L["PAD_BACK"] = "Quay lại"
+L["PAD_CLOSE_MENU"] = "Đóng menu"
+L["PAD_SCROLL"] = "Cuộn"

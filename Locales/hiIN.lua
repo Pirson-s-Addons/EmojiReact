@@ -140,3 +140,12 @@ L["AUTO_ACHIEVEMENT"] = "उपलब्धि मिली"
 L["AUTO_DEATH"] = "मृत्यु"
 L["AUTO_TOOLTIP"] = "ऐसा होने पर अपने आप प्रतिक्रिया देता है। प्रतिक्रियाएँ चालू होनी चाहिए।"
 L["AUTO_PICK_TOOLTIP"] = "दिखाई जाने वाली प्रतिक्रिया। चुनने पर आपके ऊपर पूर्वावलोकन दिखता है।"
+
+-- Navegacion con mando (UI/GamepadNav.lua)
+L["PAD_MOVE"] = "चलें"
+L["PAD_SELECT"] = "चुनें"
+L["PAD_TOGGLE"] = "टिक करें"
+L["PAD_CLOSE"] = "बंद करें"
+L["PAD_BACK"] = "वापस"
+L["PAD_CLOSE_MENU"] = "मेनू बंद करें"
+L["PAD_SCROLL"] = "स्क्रॉल"

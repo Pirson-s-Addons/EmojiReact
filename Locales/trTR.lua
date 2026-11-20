@@ -140,3 +140,12 @@ L["AUTO_ACHIEVEMENT"] = "Başarım kazanıldı"
 L["AUTO_DEATH"] = "Ölüm"
 L["AUTO_TOOLTIP"] = "Bu olduğunda kendiliğinden tepki verir. Tepkilerin açık olması gerekir."
 L["AUTO_PICK_TOOLTIP"] = "Gösterilecek tepki. Seçince üstünde bir önizleme görürsün."
+
+-- Navegacion con mando (UI/GamepadNav.lua)
+L["PAD_MOVE"] = "Hareket"
+L["PAD_SELECT"] = "Seç"
+L["PAD_TOGGLE"] = "İşaretle"
+L["PAD_CLOSE"] = "Kapat"
+L["PAD_BACK"] = "Geri"
+L["PAD_CLOSE_MENU"] = "Menüyü kapat"
+L["PAD_SCROLL"] = "Kaydır"

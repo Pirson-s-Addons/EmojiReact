@@ -96,6 +96,7 @@ picker:SetClampedToScreen(true)
 picker:EnableMouse(true)
 picker:Hide()
 tinsert(UISpecialFrames, "EmojiReactPicker") -- Esc lo cierra
+ns.GamepadNavFor(picker) -- con mando, sus botones son de la ventana (UI/GamepadNav.lua)
 
 picker.title = picker:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 picker.title:SetPoint("TOP", picker.TitleBg, "TOP", 0, -3)

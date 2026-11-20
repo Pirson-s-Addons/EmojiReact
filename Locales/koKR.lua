@@ -140,3 +140,12 @@ L["AUTO_ACHIEVEMENT"] = "업적 달성"
 L["AUTO_DEATH"] = "죽음"
 L["AUTO_TOOLTIP"] = "이 일이 일어나면 알아서 반응합니다. 반응이 켜져 있어야 합니다."
 L["AUTO_PICK_TOOLTIP"] = "표시할 반응입니다. 선택하면 머리 위에 미리보기가 나옵니다."
+
+-- Navegacion con mando (UI/GamepadNav.lua)
+L["PAD_MOVE"] = "이동"
+L["PAD_SELECT"] = "선택"
+L["PAD_TOGGLE"] = "체크"
+L["PAD_CLOSE"] = "닫기"
+L["PAD_BACK"] = "뒤로"
+L["PAD_CLOSE_MENU"] = "메뉴 닫기"
+L["PAD_SCROLL"] = "스크롤"

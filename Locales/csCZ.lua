@@ -140,3 +140,12 @@ L["AUTO_ACHIEVEMENT"] = "Získaný úspěch"
 L["AUTO_DEATH"] = "Smrt"
 L["AUTO_TOOLTIP"] = "Reaguje sama, když se to stane. Reakce musí být zapnuté."
 L["AUTO_PICK_TOOLTIP"] = "Zobrazená reakce. Po výběru uvidíš náhled nad sebou."
+
+-- Navegacion con mando (UI/GamepadNav.lua)
+L["PAD_MOVE"] = "Pohyb"
+L["PAD_SELECT"] = "Vybrat"
+L["PAD_TOGGLE"] = "Zaškrtnout"
+L["PAD_CLOSE"] = "Zavřít"
+L["PAD_BACK"] = "Zpět"
+L["PAD_CLOSE_MENU"] = "Zavřít nabídku"
+L["PAD_SCROLL"] = "Posunout"
