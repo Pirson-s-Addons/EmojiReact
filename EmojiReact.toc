@@ -97,6 +97,7 @@
 
 ## SavedVariables: EmojiReactDB
 ## X-Curse-Project-ID: 1729936
+## X-Wago-ID: n6VYJqNd
 ## X-License: MIT
 ## X-Copyright: Copyright (c) 2026 Pirson
 ## X-Website: https://github.com/Pirson-s-Addons/EmojiReact
